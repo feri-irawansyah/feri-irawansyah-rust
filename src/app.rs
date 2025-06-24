@@ -5,15 +5,14 @@ use leptos_router::{
 };
 
 use crate::{
-    routes::{
-        about::About, contact::Contact, home::Home, notes::{
-            category::Category,
-            slug::Slug,
-        }, notfound::NotFound, portfolio::Portfolio, services::Services
-    },
     components:: {
         catatan_layout::CatatanLayout,
         list_catatan::ListCatatan
+    }, routes::{
+        about::About, contact::Contact, home::Home, login::Login, notes::{
+            category::Category,
+            slug::Slug,
+        }, notfound::NotFound, portfolio::Portfolio, services::Services
     }
 };
 
@@ -45,6 +44,7 @@ pub fn App() -> impl IntoView {
                         <Route path=leptos_router::path!(":category/:slug") view=Slug />
                     </ParentRoute>
                     <Route path=StaticSegment("contact") view=Contact/>
+                    <Route path=StaticSegment("login") view=Login/>
                     <Route path=WildcardSegment("any") view=NotFound/>
                 </Routes>
 

@@ -70,3 +70,9 @@ This may be useful for integrating external tools which require a static site, e
 ## Licensing
 
 This template itself is released under the Unlicense. You should replace the LICENSE for your own application with an appropriate license if you plan to release it publicly.
+
+
+
+sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-native-tls", "chrono"] }
+chrono = { version = "0.4.40", features = ["serde"] }
+once_cell = "1.21.3"

@@ -10,6 +10,8 @@ pub mod api {
 
     pub mod middleware {
         pub mod connection;
+        pub mod crypto;
+        pub mod session;
     }
 }
 pub mod routes {
@@ -19,6 +21,7 @@ pub mod routes {
     pub mod services;
     pub mod portfolio;
     pub mod contact;
+    pub mod login;
     pub mod notes {
         pub mod category;
         pub mod slug;
