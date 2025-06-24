@@ -4,14 +4,15 @@ pub mod api {
         pub mod auth_handler;
     }
 
-    pub mod services {
-        pub mod auth_service;
-    }
-
     pub mod middleware {
         pub mod connection;
         pub mod crypto;
         pub mod session;
+    }
+
+    pub mod models {
+        pub mod auth_model;
+        pub mod global_model;
     }
 }
 pub mod routes {

@@ -27,7 +27,19 @@ pub async fn login_handler(request: LoginRequest) -> Result<LoginResponse, Serve
     let hash_password = encrypt_text(request.password.clone());
 
     // Cek user dari DB
-    let row = sqlx::query("SELECT email, password FROM users WHERE email = $1 AND password = $2")
+    let row = sqlx::query(r#"
+            SELECT 
+                B.autonid AS user_id, 
+                B.fullname,
+                A.email, 
+                A.disable_login, 
+                A.last_login, 
+                A.picture, 
+                A.register_date
+            FROM users A
+            LEFT JOIN user_kyc B ON A.web_cif_id = B.autonid
+            WHERE A.email = $1 AND A.password = $2
+            "#)
         .bind(&request.email)
         .bind(&hash_password)
         .fetch_optional(&pool)
