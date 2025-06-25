@@ -12,3 +12,9 @@ pub struct User {
     pub ip_address: Option<String>,
     pub app_name: Option<String>,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LoginRequest {
+    pub email: String,
+    pub password: String,
+}

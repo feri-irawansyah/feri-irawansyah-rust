@@ -32,6 +32,11 @@ pub mod routes {
 pub mod components {
     pub mod catatan_layout;
     pub mod list_catatan;
+    pub mod sweet_alert;
+}
+
+pub mod directives {
+    pub mod alert_context;
 }
 
 #[cfg(feature = "hydrate")]

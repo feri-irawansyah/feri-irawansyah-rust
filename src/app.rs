@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_sweetalert::*;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
     components::{ParentRoute, Route, Router, Routes}, StaticSegment, WildcardSegment
@@ -8,7 +9,8 @@ use crate::{
     components:: {
         catatan_layout::CatatanLayout,
         list_catatan::ListCatatan
-    }, routes::{
+    }, 
+    routes::{
         about::About, contact::Contact, home::Home, login::Login, notes::{
             category::Category,
             slug::Slug,
@@ -21,6 +23,8 @@ use crate::{
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+    Swal::init_key_handlers();
+    // provide_alert_context();
 
     view! {
         // injects a stylesheet into the document <head>
@@ -56,6 +60,7 @@ pub fn App() -> impl IntoView {
                 <p><a href="/contact">"Contact"</a></p>
 
             </main>
+            // <SweetAlert/>
         </Router>
     }
 }

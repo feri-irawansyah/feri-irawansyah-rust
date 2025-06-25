@@ -1,0 +1,14 @@
+// this is the dark theme of SweetAlert for Leptos.
+// Include this file AFTER the core styles in your HTML metadata.
+
+$swal-text-color: #E1E1E1;
+$swal-container-background-color: #19191A;
+
+.swal-container {
+    background-color: $swal-container-background-color;
+
+    &>p,
+    &>strong {
+        color: $swal-text-color;
+    }
+}
