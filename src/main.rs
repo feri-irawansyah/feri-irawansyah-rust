@@ -23,6 +23,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             // serve JS/WASM/CSS from `pkg`
             .service(Files::new("/pkg", format!("{site_root}/pkg")))
+            .service(Files::new("/js", format!("{site_root}/vendor/js")))
+            .service(Files::new("/css", format!("{site_root}/vendor/css")))
             // serve other assets from the `assets` directory
             .service(Files::new("/assets", &site_root))
             // serve the favicon from /favicon.ico
@@ -40,9 +42,14 @@ async fn main() -> std::io::Result<()> {
                                 <HydrationScripts options=leptos_options.clone()/>
                                 <MetaTags/>
                             </head>
-                            <body>
+                            <body> 
                                 <App/>
                             </body>
+                            <script src="/js/bootstrap.bundle.min.js?v=1234"></script>
+                            <script src="/js/aos.min.js?v=1234"></script>
+                            <script>
+                                AOS.init();
+                            </script>
                         </html>
                     }
                 }
