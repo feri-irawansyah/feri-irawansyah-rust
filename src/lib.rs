@@ -1,20 +1,4 @@
 pub mod app;
-pub mod api {
-    pub mod handlers {
-        pub mod auth_handler;
-    }
-
-    pub mod middleware {
-        pub mod connection;
-        pub mod crypto;
-        pub mod session;
-    }
-
-    pub mod models {
-        pub mod auth_model;
-        pub mod global_model;
-    }
-}
 pub mod routes {
     pub mod home;
     pub mod notfound;
