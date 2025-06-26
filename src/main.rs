@@ -41,15 +41,15 @@ async fn main() -> std::io::Result<()> {
                                 <AutoReload options=leptos_options.clone() />
                                 <HydrationScripts options=leptos_options.clone()/>
                                 <MetaTags/>
+                                <script src="/js/bootstrap.bundle.min.js"></script>
+                                <script src="/js/aos.min.js"></script>
                             </head>
-                            <body> 
+                            <body class="dark-background"> 
                                 <App/>
+                                <script>
+                                    AOS.init();
+                                </script>
                             </body>
-                            <script src="/js/bootstrap.bundle.min.js?v=1234"></script>
-                            <script src="/js/aos.min.js?v=1234"></script>
-                            <script>
-                                AOS.init();
-                            </script>
                         </html>
                     }
                 }

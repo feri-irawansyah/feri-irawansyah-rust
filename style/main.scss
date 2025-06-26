@@ -1,5 +1,5 @@
-@use "modules/variables" as *;
-@use "modules/sweetalert-core" as *;
+@import "modules/variables";
+@import "modules/sweetalert-core";
 
 * {
 	margin: 0;
@@ -566,7 +566,7 @@ section,
   z-index: 2;
 }
 
-.hero .container {
+.hero .container-fluid {
   position: relative;
   z-index: 3;
 }
@@ -611,6 +611,46 @@ section,
 
   .hero p {
     font-size: 20px;
+  }
+}
+
+.tech-marquee-wrapper {
+  width: 80%;
+  margin: 2rem auto;
+  overflow: hidden;
+  position: absolute;
+  background-color: salmon !important;
+  z-index: 99999;
+}
+
+.tech-marquee {
+  display: flex;
+  width: fit-content;
+  animation: marquee 20s linear infinite;
+}
+
+.tech-marquee-content {
+  display: flex;
+  gap: 2rem;
+}
+
+.tech-marquee-content img {
+  height: 60px;
+  width: auto;
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.tech-marquee-content img:hover {
+  transform: scale(1.1);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 

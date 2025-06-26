@@ -37,7 +37,7 @@ pub fn App() -> impl IntoView {
 
         // content for this welcome page
         <Router>
-            <main>
+            <main data-bs-theme="dark">
                 <Routes fallback=move || "Not found.">
                     <Route path=StaticSegment("") view=Home/>
                     <Route path=StaticSegment("about") view=About/>
@@ -52,16 +52,7 @@ pub fn App() -> impl IntoView {
                     <Route path=StaticSegment("login") view=Login/>
                     <Route path=WildcardSegment("any") view=NotFound/>
                 </Routes>
-
-                <p><a href="/">"Home"</a></p>
-                <p><a href="/about">"About"</a></p>
-                <p><a href="/services">"Services"</a></p>
-                <p><a href="/portfolio">"Portfolio"</a></p>
-                <p><a href="/catatan">"Blog"</a></p>
-                <p><a href="/contact">"Contact"</a></p>
-
             </main>
-            // <SweetAlert/>
         </Router>
     }
 }

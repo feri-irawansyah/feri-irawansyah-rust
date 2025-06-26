@@ -41,7 +41,7 @@ pub fn Login() -> impl IntoView {
 
 
     view! {
-        <div class="container" data-aos="fade-left" data-aos-delay="1000">
+        <div class="container" data-aos="fade-left">
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
