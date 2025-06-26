@@ -17,6 +17,7 @@ pub mod components {
     pub mod catatan_layout;
     pub mod list_catatan;
     pub mod sweet_alert;
+    pub mod menu_list;
 }
 
 pub mod directives {

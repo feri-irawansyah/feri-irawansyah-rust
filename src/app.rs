@@ -8,7 +8,8 @@ use leptos_router::{
 use crate::{
     components:: {
         catatan_layout::CatatanLayout,
-        list_catatan::ListCatatan
+        list_catatan::ListCatatan,
+        menu_list::MenuList
     }, 
     routes::{
         about::About, contact::Contact, home::Home, login::Login, notes::{
@@ -38,6 +39,7 @@ pub fn App() -> impl IntoView {
         // content for this welcome page
         <Router>
             <main data-bs-theme="dark">
+                <MenuList/>
                 <Routes fallback=move || "Not found.">
                     <Route path=StaticSegment("") view=Home/>
                     <Route path=StaticSegment("about") view=About/>
