@@ -1,0 +1,6 @@
+[tasks.build]
+script = [
+    "cargo build",
+    "mkdir -p logs",
+    "mv *.txt logs/ 2>/dev/null || true"
+]

@@ -1,0 +1,14 @@
+## Setup Aplikasi Leptos
+- Clone ini project https://github.com/microsoft/vcpkg.git
+- Abis itu jalanin `bootstrap-vcpkg.bat` di dalem project diatas
+- Install openssl dengan `vcpkg install openssl:x64-windows`
+- Buat nama environment baru di windows dengan nama `VCPKG_ROOT` isinya `C:\Program Files\vcpkg` atau lokasi lu dimana clone
+- OPENSSL_DIR: `C:\dev\vcpkg\installed\x64-windows` sama lu tadi clonenya dimana
+- OPENSSL_NO_VENDOR: kasih aja `1`
+- Terus lu tambahin lokasi bin dari tadi yang lu clone `C:\dev\vcpkg\installed\x64-windows\bin` ke PATH lu
+- `rustup update stable` update rustup dulu
+- `rustup default nightly` ganti ke nightly
+- `argo install cargo-make` lu install make biar log lu kaga amburadul
+- `rustup target add wasm32-unknown-unknown` lu masukin paksa ke `wasm32-unknown-unknown` ke target 
+- Yaudah lu jalanin `cargo leptos new --git leptos-rs/start` kalo lu pake actix kalo pake axum `cargo leptos new --git leptos-rs/start-axum`
+- Terakhir lu jalanin `cargo leptos watch` dan kelar project lu jalan

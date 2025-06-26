@@ -1,0 +1,35 @@
+// this is the borderless theme of SweetAlert for Leptos.
+// Include this file AFTER the core styles in your HTML metadata.
+
+$swal-buttons-border-radius: 0;
+$swal-material-color: #2196f3;
+$swal-text-color: #545454;
+$swal-button-focused-color: rgba($swal-material-color, .2);
+
+.swal-container>p,
+.swal-container>strong {
+    color: $swal-text-color;
+}
+
+.swal-container>div>button {
+    color: $swal-material-color;
+    border-radius: $swal-buttons-border-radius;
+    font-weight: lighter;
+
+    @for $i from 1 through 3 {
+        &:nth-child(#{$i}) {
+            background-color: transparent;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        @for $i from 1 through 3 {
+            &:nth-child(#{$i}) {
+                outline: none;
+            }
+        }
+
+        background-color: $swal-button-focused-color;
+    }
+}

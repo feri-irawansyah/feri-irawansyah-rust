@@ -1,0 +1,297 @@
+@import "variables.scss";
+
+// the black overlay behind the box
+.swal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: $swal-backdrop-background-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    opacity: 0;
+    pointer-events: none;
+
+    &:not(.swal-no-animation) {
+        transition: opacity $swal-container-transition-duration ease;
+    }
+
+    &[aria-hidden="false"] {
+        pointer-events: auto;
+        opacity: 1;
+    }
+}
+
+// the box that contains the title, the text, etc.
+.swal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: content;
+    align-items: center;
+    background-color: $swal-container-background-color;
+    border-radius: $swal-container-border-radius;
+    width: $swal-container-width;
+    min-width: $swal-container-min-width;
+    max-width: $swal-container-max-width;
+    height: $swal-container-height;
+    min-height: $swal-container-min-height;
+    max-height: $swal-container-max-height;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding: $swal-container-padding;
+
+    // the title
+    &>strong {
+        display: block;
+        color: $swal-text-color;
+        font-size: $swal-title-font-size;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    // the text (description)
+    &>p {
+        margin: 0 0 20px 0;
+        text-align: center;
+        color: $swal-text-color;
+        font-size: $swal-text-font-size;
+    }
+
+    // the div that contains the buttons
+    // below the text (description)
+    &>div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    // the buttons (confirm button, deny, cancel)
+    &>div>button {
+        margin: 0 5px 10px 5px;
+        border: none;
+        cursor: pointer;
+        color: $swal-buttons-text-color;
+        font-size: $swal-buttons-font-size;
+        border-radius: $swal-buttons-border-radius;
+        padding: $swal-buttons-padding;
+        box-sizing: border-box;
+
+        &.swal-confirm-button {
+            background-color: $swal-confirm-button-background-color;
+
+            &:focus {
+                outline: 3px solid rgba($swal-confirm-button-background-color, .5);
+            }
+        }
+
+        &.swal-deny-button {
+            background-color: $swal-deny-button-background-color;
+
+            &:focus {
+                outline: 3px solid rgba($swal-deny-button-background-color, .5);
+            }
+        }
+
+        &.swal-cancel-button {
+            background-color: $swal-cancel-button-background-color;
+
+            &:focus {
+                outline: 3px solid rgba($swal-cancel-button-background-color, .5);
+            }
+        }
+    }
+}
+
+.swal-container-icon {
+    width: $swal-icon-size;
+    height: $swal-icon-size;
+
+    .success-icon {
+        width: inherit;
+        height: inherit;
+        stroke: $swal-success-icon-color;
+        stroke-width: $swal-success-stroke-width;
+        fill: $swal-success-icon-color;
+    }
+
+    .swal-rounded-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: inherit;
+        height: inherit;
+        border-radius: 50%;
+        box-sizing: border-box;
+        border-width: $swal-rounded-icons-border-width;
+
+        svg {
+            width: $swal-icon-size - 60px;
+            height: $swal-icon-size - 60px;
+        }
+    }
+
+    .swal-warning-icon {
+        border-style: solid;
+        border-color: $swal-warning-border-color;
+
+        svg path {
+            fill: $swal-warning-mark-color;
+        }
+    }
+
+    .swal-error-icon {
+        border-style: solid;
+        border-color: $swal-error-border-color;
+
+        path {
+            fill: $swal-error-cross-color;
+        }
+    }
+
+    .swal-info-icon {
+        border-style: solid;
+        border-color: $swal-info-border-color;
+
+        path {
+            fill: $swal-info-mark-color;
+        }
+    }
+
+    .swal-question-icon {
+        border-style: solid;
+        border-color: $swal-question-border-color;
+
+        path {
+            stroke: $swal-question-mark-color;
+            stroke-width: 2px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    }
+}
+
+// The styles specific to the icons' animations
+.swal-backdrop:not(.swal-no-animation) .swal-container-icon {
+    animation: fadeIn 500ms forwards 1 ease-out;
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+
+    &,
+    svg.success-icon g {
+        animation: fillanim 300ms ease-in forwards 2s;
+
+        @keyframes fillanim {
+            from {
+                fill: transparent;
+            }
+
+            to {
+                fill: $swal-success-icon-color;
+            }
+        }
+    }
+
+    .success-icon {
+        fill: transparent;
+
+        path {
+            stroke-dasharray: 800px;
+            stroke-dashoffset: 800px;
+            animation: lineanim 2s ease forwards;
+
+            @keyframes lineanim {
+                to {
+                    stroke-dashoffset: 0;
+                }
+            }
+        }
+    }
+
+    .swal-rounded-icon {
+        animation: flip 300ms 1 ease-in forwards;
+
+        @keyframes flip {
+            from {
+                transform: rotateX(50deg);
+            }
+
+            to {
+                transform: rotateX(0deg);
+            }
+        }
+    }
+
+    .swal-warning-icon svg {
+        animation: bouncing 300ms 200ms 1 ease-out forwards;
+    }
+
+    .swal-error-icon svg {
+        opacity: 0;
+        transform: scale(0.5);
+        animation: expanding 400ms 200ms 1 ease-out forwards;
+
+        @keyframes expanding {
+            50% {
+                opacity: 0.8;
+            }
+
+            60% {
+                transform: scale(1.1);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.0);
+            }
+        }
+    }
+
+    .swal-info-icon svg {
+        animation: bouncing 500ms 200ms 1 ease forwards;
+    }
+
+    .swal-question-icon svg {
+        opacity: 0;
+        transform: rotateY(90deg);
+        animation: rotate 400ms 200ms 1 ease-out forwards;
+
+        @keyframes rotate {
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+                transform: rotateY(0deg);
+            }
+        }
+    }
+
+    @keyframes bouncing {
+        from {
+            transform: rotateZ(0deg);
+        }
+
+        20% {
+            transform: rotateZ(10deg);
+        }
+
+        50% {
+            transform: rotateZ(-10deg);
+        }
+
+        to {
+            transform: rotateZ(0);
+        }
+    }
+}
