@@ -1,15 +1,77 @@
-use leptos::prelude::*;
+use leptos::{prelude::*, task::spawn_local};
 use leptos_router::hooks::use_params_map;
+use wasm_bindgen::JsCast;
+use leptos::web_sys::HtmlImageElement;
+use crate::{components::markdown::MarkdownFromUrl, contexts::models::{AppState, Note, NoteData}};
 
 #[allow(non_snake_case)]
 #[component]
 pub fn Slug() -> impl IntoView {
     let params = use_params_map();
-    let category = params.with(|p| p.get("category"));
     let slug = params.with(|p| p.get("slug"));
 
+    let notes: RwSignal<Note> = RwSignal::new(Note::new());
+    let state = expect_context::<AppState>();
+    let (loading, set_loading) = signal(false);
+
+    let slug_name = slug.clone().unwrap_or("".to_string());
+
+    Effect::new(move |_| {
+
+        let url = format!(
+            "https://snakesystem-web-api-tdam.shuttle.app/api/v1/library/get-single/{slug_name}"
+        );
+
+        spawn_local(async move {
+            set_loading(true);
+            if let Ok(response) = reqwest::get(&url).await {
+                if let Ok(data) = response.json::<NoteData>().await {
+                    notes.set(data.data);
+                    state.title.set(notes.get().title.clone());
+                }
+            }
+            set_loading(false);
+        });
+    });
+
     view! {
-        <p>"Kategori: " {category.unwrap_or("None".to_string())}</p>
-        <p>"Slug: " {slug.unwrap_or("None".to_string())}</p>
+        <Show
+            when=move || { !loading.get() }
+            fallback=|| view! { <h1>Loading....</h1> }
+        >
+            <Show
+                when=move || { notes.get().content_md.is_empty() }
+                fallback=move || {
+                    view! { 
+                        <div class="author d-flex flex-row align-items-start justify-content-start w-100">
+                            <img src="/assets/img/logo-ss.png" class="mb-3 rounded-circle" width="50px" alt=""/>
+                            <div class="flex-column">
+                                <a class="text-decoration-none text-muted" href="https://github.com/feri-irawansyah" target="_blank">
+                                {move || state.name.get().to_string()} <img src="/assets/img/real.png" width="20px" alt=""/></a>
+                                <p class="text-muted">{notes.get().last_update}</p>
+                            </div>
+                        </div>
+                        <div class="w-100"  data-aos="fade-up" data-aos-duration="1000">
+                            <div class="image-content d-flex justify-content-center" >
+                                <img class="img-fluid rounded" src={format!("/assets/img/notes/{}.png", notes.get().slug)} alt={notes.get().title} 
+                                    on:error=move |e: leptos::ev::ErrorEvent| {
+                                        if let Some(target) = e.target() {
+                                            if let Ok(img) = target.dyn_into::<HtmlImageElement>() {
+                                                img.set_src("/assets/img/notes/default.jpg");
+                                            }
+                                        }
+                                    }/>
+                            </div>
+                            <div class="markdown-body">
+                                <MarkdownFromUrl url={notes.get().content_md}/>
+                            </div>
+                        </div>
+                    }
+                }
+            >
+                <h1>"Slug not found"</h1>
+            </Show>
+        </Show>
+        
     }
 }

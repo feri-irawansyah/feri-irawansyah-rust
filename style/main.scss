@@ -93,6 +93,15 @@ a:hover {
   text-decoration: none;
 }
 
+main {
+  .container-fluid {
+    .col-lg-10 {
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+  }
+}
+
 h1,
 h2,
 h3,
@@ -221,76 +230,153 @@ h6 {
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
-.navmenu {
-  padding: 0;
-  z-index: 9997;
-}
-
-.navmenu ul {
-  list-style: none;
-  padding: 0 0 20px 0;
-  margin: 0;
-  width: 140px;
-}
-
-.navmenu a,
-.navmenu a:focus {
-  color: var(--nav-color);
-  font-family: var(--nav-font);
+.menu-list {
+  z-index: 9999;
+  background-color: var(--background-color);
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 10px 18px;
-  margin-bottom: 8px;
-  font-size: 15px;
-  border-radius: 50px;
-  background: color-mix(in srgb, var(--default-color), transparent 92%);
-  height: 56px;
-  width: 100%;
-  overflow: hidden;
-  transition: 0.3s;
-}
+  justify-content: start;
+  background-color: #404449;
+  overflow-y: auto;
+  padding: 2rem 0;
 
-.navmenu a i,
-.navmenu a:focus i {
-  font-size: 20px;
-}
+  p, a, span {
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-align: center;
 
-.navmenu a span,
-.navmenu a:focus span {
-  padding: 0 5px 0 7px;
-}
-
-@media (min-width: 992px) {
-
-  .navmenu a,
-  .navmenu a:focus {
-    max-width: 56px;
   }
 
-  .navmenu a span,
-  .navmenu a:focus span {
-    display: none;
+  ul {
+    width: 100%;
+    padding: 1rem;
+    // margin-bottom: 5rem;
+  }
+
+  li {
+    margin: 1rem 0;
+    text-align: center;
+    width: 100%;
+    padding: 0.3rem 0;
+    border-radius: 5px;
+
+    a {
+      color: var(--default-color);
+      transition: color 0.3s;
+      display: flex;
+      flex-direction: column;
+
+      i {
+        font-size: 1.5rem;
+      }
+
+      span {
+        font-size: 1rem;
+      }
+
+      &:hover {
+        background-color: #6c757d;
+        border-radius: 5px;
+      }
+    }
+
+    &.active {
+      background-color: var(--accent-color);
+      a {
+        color: var(--contrast-color);
+      }
+
+      &:hover a {
+        background-color: var(--accent-color) !important;
+      }
+    }
+  }
+
+  img {
+    width: 7rem;
+    height: 7rem;
+    object-position: top center;
+    object-fit: cover;
+  }
+
+  .copyright {
+    text-align: center;
+    bottom: 3rem;
   }
 }
+// .navmenu {
+//   padding: 0;
+//   z-index: 9997;
+// }
 
-.navmenu a:hover,
-.navmenu .active,
-.navmenu .active:focus,
-.navmenu li:hover>a {
-  color: var(--contrast-color);
-  background: var(--nav-hover-color);
-}
+// .navmenu ul {
+//   list-style: none;
+//   padding: 0 0 20px 0;
+//   margin: 0;
+//   width: 140px;
+// }
 
-.navmenu a:hover,
-.navmenu li:hover>a {
-  max-width: 100%;
-  color: var(--contrast-color);
-}
+// .navmenu a,
+// .navmenu a:focus {
+//   color: var(--nav-color);
+//   font-family: var(--nav-font);
+//   display: flex;
+//   align-items: center;
+//   padding: 10px 18px;
+//   margin-bottom: 8px;
+//   font-size: 15px;
+//   border-radius: 50px;
+//   background: color-mix(in srgb, var(--default-color), transparent 92%);
+//   height: 56px;
+//   width: 100%;
+//   overflow: hidden;
+//   transition: 0.3s;
+// }
 
-.navmenu a:hover span,
-.navmenu li:hover>a span {
-  display: block;
-}
+// .navmenu a i,
+// .navmenu a:focus i {
+//   font-size: 20px;
+// }
+
+// .navmenu a span,
+// .navmenu a:focus span {
+//   padding: 0 5px 0 7px;
+// }
+
+// @media (min-width: 992px) {
+
+//   .navmenu a,
+//   .navmenu a:focus {
+//     max-width: 56px;
+//   }
+
+//   .navmenu a span,
+//   .navmenu a:focus span {
+//     display: none;
+//   }
+// }
+
+// .navmenu a:hover,
+// .navmenu .active,
+// .navmenu .active:focus,
+// .navmenu li:hover>a {
+//   color: var(--contrast-color);
+//   background: var(--nav-hover-color);
+// }
+
+// .navmenu a:hover,
+// .navmenu li:hover>a {
+//   max-width: 100%;
+//   color: var(--contrast-color);
+// }
+
+// .navmenu a:hover span,
+// .navmenu li:hover>a span {
+//   display: block;
+// }
 
 /*--------------------------------------------------------------
 # Global Footer
@@ -492,8 +578,8 @@ section,
 # Global Section Titles
 --------------------------------------------------------------*/
 .section-title {
-  text-align: center;
-  padding-bottom: 60px;
+  text-align: start;
+  padding-bottom: 1.3rem;
   position: relative;
 }
 
@@ -509,26 +595,26 @@ section,
   content: "";
   position: absolute;
   display: block;
-  width: 160px;
+  width: 50%;
   height: 1px;
   background: color-mix(in srgb, var(--default-color), transparent 60%);
   left: 0;
   right: 0;
   bottom: 1px;
-  margin: auto;
+  // margin: auto;
 }
 
 .section-title h2::after {
   content: "";
   position: absolute;
   display: block;
-  width: 60px;
+  width: 25%;
   height: 3px;
   background: var(--accent-color);
   left: 0;
   right: 0;
   bottom: 0;
-  margin: auto;
+  // margin: auto;
 }
 
 .section-title p {
@@ -556,6 +642,7 @@ section,
   height: 100%;
   object-fit: cover;
   z-index: 1;
+  object-position: right center;
 }
 
 .hero:before {
@@ -566,15 +653,55 @@ section,
   z-index: 2;
 }
 
-.hero .container {
-  position: relative;
-  z-index: 3;
+.hero {
+  .container {
+    position: relative;
+    z-index: 3;
+
+    .row {
+      justify-content: flex-start !important;
+    padding: 0 0.5rem;
+
+      .col-lg-8 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 1rem 0;
+
+        .row {
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+        
+        .card {
+          width: 31% !important;
+        }
+      }
+    }
+  }
 }
 
 .hero h2 {
   margin: 0;
   font-size: 64px;
   font-weight: 700;
+}
+
+.hero {
+  .card {
+    img {
+      position: relative;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-weight: bold;
+    }
+
+    .card-text {
+      font-size: 1rem;
+    }
+  }
 }
 
 .hero p {
@@ -686,6 +813,26 @@ section,
 /*--------------------------------------------------------------
 # Skills Section
 --------------------------------------------------------------*/
+.list-skill {
+  position: relative;
+  max-height: 28rem;
+  overflow-y: scroll;
+
+  a {
+    text-decoration: none;
+    border: none;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  a:hover {
+    background-color: var(--accent-color) !important;
+  }
+}
+
 .skills .progress {
   height: 60px;
   display: block;
@@ -782,11 +929,52 @@ section,
 /*--------------------------------------------------------------
 # Portfolio Section
 --------------------------------------------------------------*/
-.portfolio .portfolio-filters {
-  padding: 0;
-  margin: 0 auto 20px auto;
-  list-style: none;
-  text-align: center;
+.portfolio {
+  a.card {
+    cursor: pointer;
+  }
+  a.card:hover {
+    .card-img {
+      filter: blur(4px);
+      transition: filter 0.3s ease;
+    }
+    p {
+      text-decoration: underline;
+    }
+    h5 {
+      color: $info !important;
+    }
+  }
+
+  .card-img-overlay {
+    .card-title {
+      color: var(--contrast-color) !important;
+    }
+    .card-tech {
+      display: inline-flex;
+      flex-direction: row !important;
+      flex-wrap: wrap;
+      justify-content: start;
+    }
+    span {
+      padding: 0.4rem;
+      margin: 0.2rem;
+      border-radius: 5px;
+    }
+    .tech {
+      background-color: var(--background-color);
+    }
+    small {
+      font-size: 1rem;
+    }
+    img {
+      margin-left: 0.2rem;
+      width: 1rem;
+      height: 1rem;
+    }
+    opacity: 1;
+    background: linear-gradient(to top, #1b1b1b, #272626a6);
+  }
 }
 
 .portfolio .portfolio-filters li {
@@ -1478,6 +1666,58 @@ section,
 }
 
 /*--------------------------------------------------------------
+# Catatan Section
+--------------------------------------------------------------*/
+.catatan {
+  .a:hover {
+    .card-img {
+      filter: blur(4px) !important;
+      transition: filter 0.3s ease;
+    }
+    h5 {
+      text-decoration: underline;
+    }
+  }
+
+  .section-title {
+    padding-bottom: 0 !important;
+  }
+
+  .category {
+    padding-top: 1.3rem;
+    .card {
+      .card-img-overlay {
+        background: linear-gradient(to top, #1b1b1b, #272626a6);
+      }
+
+      .card-footer {
+        z-index: 1;
+      }
+
+      h5 {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: var(--contrast-color) !important;
+      }
+
+      &:hover {
+        .card-img {
+          filter: blur(4px) !important;
+          transition: filter 0.3s ease;
+        }
+        h5 {
+          text-decoration: underline;
+        }
+        p {
+          text-decoration: underline;
+          color: var(--contrast-color);
+        }
+      }
+    }
+  }
+}
+
+/*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
 
@@ -1575,3 +1815,35 @@ h5.card-title {
     background-color: color-mix(in srgb, var(--background-color), transparent 92%);
   }
 }
+
+.badge-experience {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(to right, #007bff, #00c6ff);
+    color: white;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.badge-experience:hover {
+    transform: scale(1.05);
+}
+
+.badge-experience .label {
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-experience .value {
+    font-size: 16px;
+}
+

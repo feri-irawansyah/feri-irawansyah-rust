@@ -43,12 +43,16 @@ async fn main() -> std::io::Result<()> {
                                 <MetaTags/>
                                 <script src="/js/bootstrap.bundle.min.js"></script>
                                 <script src="/js/aos.min.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        hljs.highlightAll();
+                                    });
+                                </script>
                             </head>
                             <body class="dark-background"> 
                                 <App/>
-                                <script>
-                                    AOS.init();
-                                </script>
                             </body>
                         </html>
                     }

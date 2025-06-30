@@ -22,6 +22,10 @@ dotenvy = { version = "0.15.7", optional = true }
 alert-rs = { version = "0.2.4", features = ["lep"] }
 leptos_sweetalert = "1.0.2"
 serde_json = "1.0.140"
+reqwest = { version = "0.12", features = ["json"] }
+pulldown-cmark = { version = "0.13.0", optional = true }
+syntect = { version = "5.2.0", optional = true, features = ["html"] }
+reactive_stores = "0.2.2"
 
 [features]
 csr = ["leptos/csr"]
@@ -31,6 +35,8 @@ ssr = [
   "dep:actix-web",
   "dep:leptos_actix",
   "dep:dotenvy",
+  "dep:syntect",
+  "dep:pulldown-cmark",
   "leptos/ssr",
   "leptos_meta/ssr",
   "leptos_router/ssr",

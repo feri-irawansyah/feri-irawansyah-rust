@@ -1,4 +1,8 @@
 pub mod app;
+pub mod contexts {
+    pub mod index;
+    pub mod models;
+}
 pub mod routes {
     pub mod home;
     pub mod notfound;
@@ -10,14 +14,17 @@ pub mod routes {
     pub mod notes {
         pub mod category;
         pub mod slug;
+        pub mod list_catatan;
     }
 }
 
 pub mod components {
     pub mod catatan_layout;
-    pub mod list_catatan;
     pub mod sweet_alert;
     pub mod menu_list;
+    pub mod badge;
+    pub mod list_skill;
+    pub mod markdown;
 }
 
 pub mod directives {
