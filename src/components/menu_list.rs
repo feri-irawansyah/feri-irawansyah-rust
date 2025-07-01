@@ -1,16 +1,19 @@
 use leptos::prelude::*;
 use leptos_router::{hooks::use_location, location::Location};
 
+use crate::contexts::models::AppState;
+
 #[allow(non_snake_case)]
 #[component]
 pub fn MenuList() -> impl IntoView {
     
     let location: Location = use_location();
+    let state = expect_context::<AppState>();
 
     view! {
         <div class="menu-list">
             <img src="/assets/img/feri.jpg" alt="feri" class="rounded-circle img-fluid about-img mb-1" />
-            <h5 class="fw-bold mb-0">Feri Irawansyah</h5>
+            <h5 class="fw-bold mb-0">{move || state.name.get()}<img class="real-image" src="/assets/img/real.png" alt="feri" /></h5>
             <p class="mt-0">Software Engineer From Indonesia</p>
             <ul class="list-unstyled">
                 <li class:active=move || (location.pathname)() == "/"><a href="/"><i class="bi bi-house"></i> <span>Home</span></a></li>
@@ -21,7 +24,7 @@ pub fn MenuList() -> impl IntoView {
                 <li class:active=move || (location.pathname)() == "/contact"><a href="/contact"><i class="bi bi-envelope"></i> <span>Contact</span></a></li>
             </ul>
             <div class="copyright">
-                @ <strong><a href="https://github.com/feri-irawansyah">Feri Irawansyah</a></strong>.
+                @ <strong><a href="https://github.com/feri-irawansyah">{move || state.name.get()}</a></strong>.
                 <p>All Rights Reserved</p>
                 <div class="credits">
                     Powered by <a href="https://leptos.dev">Rust Leptos</a> <i>"❤️"</i>

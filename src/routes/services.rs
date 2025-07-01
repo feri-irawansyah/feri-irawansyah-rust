@@ -22,7 +22,7 @@ pub fn Services() -> impl IntoView {
                             </svg>
                             <i class="bi bi-activity"></i>
                             </div>
-                            <a href="/" class="stretched-link">
+                            <a href="/services/backend" class="stretched-link">
                             <h3>Backend Development</h3>
                             </a>
                             <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.</p>
@@ -37,7 +37,7 @@ pub fn Services() -> impl IntoView {
                             </svg>
                             <i class="bi bi-broadcast"></i>
                             </div>
-                            <a href="/" class="stretched-link">
+                            <a href="/services/frontend" class="stretched-link">
                             <h3>Frontend Web Development</h3>
                             </a>
                             <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.</p>
@@ -52,7 +52,7 @@ pub fn Services() -> impl IntoView {
                             </svg>
                             <i class="bi bi-easel"></i>
                             </div>
-                            <a href="/" class="stretched-link">
+                            <a href="/services/seo" class="stretched-link">
                             <h3>Seo Optimization</h3>
                             </a>
                             <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.</p>
@@ -67,11 +67,11 @@ pub fn Services() -> impl IntoView {
                             </svg>
                             <i class="bi bi-bounding-box-circles"></i>
                             </div>
-                            <a href="/" class="stretched-link">
+                            <a href="/services/database" class="stretched-link">
                             <h3>Database Management</h3>
                             </a>
                             <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.</p>
-                            <a href="/" class="stretched-link" aria-hidden="true"></a>
+                            <a href="/services/database" class="stretched-link" aria-hidden="true"></a>
                         </div>
                     </div>
 
@@ -83,11 +83,11 @@ pub fn Services() -> impl IntoView {
                             </svg>
                             <i class="bi bi-calendar4-week icon"></i>
                             </div>
-                            <a href="/" class="stretched-link">
+                            <a href="/services/mentoring" class="stretched-link">
                             <h3>Mentoring</h3>
                             </a>
                             <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.</p>
-                            <a href="/" class="stretched-link" aria-hidden="true"></a>
+                            <a href="/services/mentoring" class="stretched-link" aria-hidden="true"></a>
                         </div>
                     </div>
 
@@ -99,11 +99,11 @@ pub fn Services() -> impl IntoView {
                             </svg>
                             <i class="bi bi-chat-square-text"></i>
                             </div>
-                            <a href="/" class="stretched-link">
+                            <a href="/services/software-architecture" class="stretched-link">
                             <h3>Software Architecture</h3>
                             </a>
                             <p>Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant morbi.</p>
-                            <a href="/" class="stretched-link" aria-hidden="true"></a>
+                            <a href="/services/software-architecture" class="stretched-link" aria-hidden="true"></a>
                         </div>
                     </div>
 

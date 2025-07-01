@@ -7,14 +7,14 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:client": "wasm-pack build --target web --out-dir site/pkg client -- --features hydrate",
+    "build:server": "worker-build --release --features ssr --no-default-features --bin example"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "bootstrap": "^5.3.7",
-    "highlight.js": "^11.11.1"
+    "bootstrap": "^5.3.7"
   },
   "dependencies": {
     "bootstrap-icons": "^1.13.1"

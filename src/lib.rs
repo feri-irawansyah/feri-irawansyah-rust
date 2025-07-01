@@ -22,9 +22,11 @@ pub mod components {
     pub mod catatan_layout;
     pub mod sweet_alert;
     pub mod menu_list;
-    pub mod badge;
     pub mod list_skill;
     pub mod markdown;
+    pub mod clock;
+    pub mod skill_slider;
+    pub mod about_tab;
 }
 
 pub mod directives {

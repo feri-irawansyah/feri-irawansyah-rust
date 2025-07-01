@@ -1,3 +1,4 @@
+use gloo_net::http::Request;
 use leptos::{prelude::*, task::spawn_local};
 #[cfg(feature = "ssr")]
 use pulldown_cmark::{html::push_html, CodeBlockKind, Event, Options, Parser, Tag, TagEnd, CowStr};
@@ -79,7 +80,7 @@ pub fn MarkdownFromUrl(url: String) -> impl IntoView {
             if url.is_empty() {
                 set_error.set(Some("URL is empty".to_string()));
             } else {
-                match reqwest::get(url).await {
+                match Request::get(&url).send().await {
                     Ok(res) => match res.text().await {
                         Ok(text) => set_content.set(Some(text)),
                         Err(e) => set_error.set(Some(format!("Error reading text: {e}"))),

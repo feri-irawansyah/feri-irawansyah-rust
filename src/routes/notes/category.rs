@@ -1,6 +1,7 @@
+use gloo_net::http::Request;
 use leptos::{prelude::*, task::spawn_local};
 use leptos_router::hooks::{use_params_map};
-use crate::contexts::models::{Notes, NotesData};
+use crate::{app::BACKEND_URL, contexts::{index::format_wib_date, models::{AppState, Notes, NotesData}}};
 use wasm_bindgen::JsCast;
 use leptos::web_sys::HtmlImageElement;
 
@@ -13,7 +14,7 @@ pub fn Category() -> impl IntoView {
     let (total, set_total) = signal(0);
     let (current_page, set_current_page) = signal(1);
     let (loading, set_loading) = signal(false);
-
+    let state = expect_context::<AppState>();
     let categories = format!("{}", category.unwrap_or("".to_string()));
 
     let limit = 3;
@@ -21,12 +22,15 @@ pub fn Category() -> impl IntoView {
     let fetch_notes = move |page: i32| {
         let offset = (page - 1) * limit;
         let url = format!(
-            "https://snakesystem-web-api-tdam.shuttle.app/api/v1/data/get-table?tablename=Notes&offset={offset}&limit={limit}&nidkey=NotesNID&filter={{\"NotesCategory\": \"{categories}\"}}"
+            "{}/data/get-table?tablename=ViewNotes&offset={}&limit={}&nidkey=notes_id",
+            BACKEND_URL,
+            offset,
+            limit
         );
 
         spawn_local(async move {
             set_loading(true);
-            if let Ok(response) = reqwest::get(&url).await {
+            if let Ok(response) = Request::get(&url).send().await {
                 if let Ok(data) = response.json::<NotesData>().await {
                     notes.set(data.rows);
                     set_total(data.total);
@@ -55,9 +59,9 @@ pub fn Category() -> impl IntoView {
                             let notes_clone = notes.get().clone();
                             {notes_clone.iter().map(|note| view! {
                                 <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                                    <a class="card text-center" href=format!("/catatan/{}/{}", note.NotesCategory.clone(), note.Slug.clone())>
-                                        <img src=format!("/assets/img/notes/{}.png", note.Slug.clone())
-                                            alt={note.Title.clone()}
+                                    <a class="card text-center" href=format!("/catatan/{}/{}", note.category.clone(), note.slug.clone())>
+                                        <img src=format!("/assets/img/notes/{}.png", note.slug.clone())
+                                            alt={note.title.clone()}
                                             on:error=move |e: leptos::ev::ErrorEvent| {
                                                 if let Some(target) = e.target() {
                                                     if let Ok(img) = target.dyn_into::<HtmlImageElement>() {
@@ -67,16 +71,16 @@ pub fn Category() -> impl IntoView {
                                             }
                                             class="card-img rounded py-1"/>
                                         <div class="card-img-overlay">
-                                            <h5 class="card-title text-start text-uppercase">{note.Title.clone()}</h5>
-                                            <p class="card-text text-start">{note.Description.clone()}</p>
+                                            <h5 class="card-title text-start text-uppercase">{note.title.clone()}</h5>
+                                            <p class="card-text text-start">{note.description.clone()}</p>
                                         </div>
                                         <div class="card-footer text-body-secondary">
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex gap-2">
                                                     <img class="rounded-circle" src="/assets/img/logo-ss.png" style="width: 1.5rem; height: 1.5rem;"/>
-                                                    <span>Feri Irawansyah</span>
+                                                    <span>{move || state.name.get()}</span>
                                                 </div>
-                                                <span class="text-white">{note.LastUpdate.clone()}</span>
+                                                <small class="text-white">{format_wib_date(&note.last_update)}</small>
                                             </div>
                                         </div>
                                     </a>

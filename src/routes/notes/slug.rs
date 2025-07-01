@@ -1,8 +1,9 @@
+use gloo_net::http::Request;
 use leptos::{prelude::*, task::spawn_local};
 use leptos_router::hooks::use_params_map;
 use wasm_bindgen::JsCast;
 use leptos::web_sys::HtmlImageElement;
-use crate::{components::markdown::MarkdownFromUrl, contexts::models::{AppState, Note, NoteData}};
+use crate::{app::BACKEND_URL, components::markdown::MarkdownFromUrl, contexts::{index::format_wib_date, models::{AppState, Note, NoteData}}};
 
 #[allow(non_snake_case)]
 #[component]
@@ -19,12 +20,14 @@ pub fn Slug() -> impl IntoView {
     Effect::new(move |_| {
 
         let url = format!(
-            "https://snakesystem-web-api-tdam.shuttle.app/api/v1/library/get-single/{slug_name}"
+            "{}/library/get-single/{}",
+            BACKEND_URL,
+            slug_name
         );
 
         spawn_local(async move {
             set_loading(true);
-            if let Ok(response) = reqwest::get(&url).await {
+            if let Ok(response) = Request::get(&url).send().await {
                 if let Ok(data) = response.json::<NoteData>().await {
                     notes.set(data.data);
                     state.title.set(notes.get().title.clone());
@@ -48,7 +51,7 @@ pub fn Slug() -> impl IntoView {
                             <div class="flex-column">
                                 <a class="text-decoration-none text-muted" href="https://github.com/feri-irawansyah" target="_blank">
                                 {move || state.name.get().to_string()} <img src="/assets/img/real.png" width="20px" alt=""/></a>
-                                <p class="text-muted">{notes.get().last_update}</p>
+                                <p class="text-muted">{format_wib_date(&notes.get().last_update)}</p>
                             </div>
                         </div>
                         <div class="w-100"  data-aos="fade-up" data-aos-duration="1000">

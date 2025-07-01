@@ -17,6 +17,8 @@ use crate::{
     }
 };
 
+pub const BACKEND_URL: &str = "https://snakesystem-web-api-tdam.shuttle.app/api/v1";
+
 #[wasm_bindgen(inline_js = "
     export function initAOS() {
         AOS.init({
@@ -49,12 +51,13 @@ extern "C" {
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
-    provide_meta_context();
     Swal::init_key_handlers();
+    provide_meta_context();
     let global_state = AppState {
         count: RwSignal::new(0),
         name: RwSignal::new("Feri Irawansyah".to_string()),
         title: RwSignal::new("".to_string()),
+        is_notfound: RwSignal::new(false)
     };
 
     // Register biar bisa dipakai semua komponen
@@ -64,13 +67,14 @@ pub fn App() -> impl IntoView {
         initAOS(); // ini panggil JS function
     });
 
+    let state = expect_context::<AppState>();
+
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/feri-irawansyah.css"/>
         <Stylesheet id="aos" href="/css/aos.min.css"/>
         <Stylesheet id="icons" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
-        <Stylesheet id="icons" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.css"/>
 
         // sets the document title
         <Title text="Feri Irawansyah"/>
@@ -80,10 +84,18 @@ pub fn App() -> impl IntoView {
             <main data-bs-theme="dark">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-2 p-0">
-                            <MenuList/>
-                        </div>
-                        <div class="col-lg-10 p-0">
+                        <Show when=move || !state.is_notfound.get() >
+                            <div class="col-lg-2 p-0">
+                                <MenuList/>
+                            </div>
+                        </Show>
+                        <div class=move || {
+                            if state.is_notfound.get() {
+                                "col-12 p-0"
+                            } else {
+                                "col-lg-10 p-0"
+                            }
+                        }>
                             <Routes fallback=move || "Not found.">
                                 <Route path=StaticSegment("") view=Home/>
                                 <Route path=StaticSegment("about") view=About/>

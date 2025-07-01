@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 
+use crate::contexts::models::AppState;
+
 #[allow(non_snake_case)]
 #[component]
 pub fn NotFound() -> impl IntoView {
@@ -17,7 +19,30 @@ pub fn NotFound() -> impl IntoView {
         resp.set_status(actix_web::http::StatusCode::NOT_FOUND);
     }
 
+    let state = expect_context::<AppState>();
+
+    Effect::new(move |_| {
+        state.is_notfound.set(true);
+    });
+
+    let go_back_and_reload = move |_| {
+        state.is_notfound.set(false);
+        // Kembali ke halaman sebelumnya
+        window().history().unwrap().back().ok();
+    };
+
     view! {
-        <h1>"Not Found"</h1>
+        <section id="notfound" class="notfound section">
+            <div class="container section-title" data-aos="zoom-in">
+                <h2>404</h2>
+                <p>Page Not Found</p>
+                <button class="btn btn-primary mt-3" on:click=go_back_and_reload>
+                    <i class="bi bi-arrow-left-circle me-2"></i>Kembali
+                </button>
+            </div>
+            <div class="container" data-aos="zoom-in" data-aos-delay="100">
+                <img class="img-fluid" src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif" alt="404" />
+            </div>
+        </section>
     }
 }

@@ -37,11 +37,28 @@ pub struct Category {
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct Notes {
-    pub Title: String,
-    pub Description: Option<String>,
-    pub Slug: String,
-    pub LastUpdate: String,
-    pub NotesCategory: String
+    pub notes_id: i32,
+    pub title: String,
+    pub description: Option<String>,
+    pub slug: String,
+    pub last_update: String,
+    pub category: String,
+    pub hash_tags: Option<Vec<HashTag>>
+}
+
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct HashTag {
+    pub tag_id: i32,
+    pub tag_name: String,
+    pub img_url: String,
+    pub notes_id: i32
+}
+
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct HashTagData {
+    pub result: bool,
+    pub message: String,
+    pub data: Vec<HashTag>,
 }
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
@@ -77,6 +94,7 @@ pub struct NoteData {
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct NotesData {
     pub rows: Vec<Notes>,
+    #[allow(non_snake_case)]
     pub totalNotFiltered: usize,
     pub total: usize,
 }
@@ -85,5 +103,6 @@ pub struct NotesData {
 pub struct AppState {
     pub count: RwSignal<i32>,
     pub name: RwSignal<String>,
-    pub title: RwSignal<String>
+    pub title: RwSignal<String>,
+    pub is_notfound: RwSignal<bool>
 }
