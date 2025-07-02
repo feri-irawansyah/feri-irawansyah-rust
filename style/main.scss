@@ -1794,6 +1794,7 @@ section,
   .category {
     padding-top: 1.3rem;
     .card {
+      margin: 1rem 0;
       .card-img-overlay {
         background: linear-gradient(to top, #1b1b1b, #272626a6);
       }
@@ -1822,6 +1823,12 @@ section,
         }
       }
     }
+  }
+
+  .back {
+    margin: 0;
+    margin-bottom: 1rem;
+    border: 1px solid var(--contrast-color);
   }
 }
 

@@ -24,28 +24,32 @@ pub fn CatatanLayout() -> impl IntoView {
 
     view! {
         <section id="catatan" class="catatan section" data-aos="fade-left">
-            <Show
-                when=move || { category.get().is_some() }
-                fallback=|| view! { <span></span> }
-            >
+
+            <div class="container">
                 <Show
-                    when=move || { !slug.get().is_some() }
-                    fallback=move || {
-                        let cat = category.get().clone().unwrap_or("".to_string());
-                        view! { 
-                            <a class="btn text-start back mx-4" href={format!("/catatan/{}", cat)}>
-                                <i class="bi bi-arrow-left-circle me-2"></i>Kembali
-                            </a>
-                        }
-                    }
+                    when=move || { category.get().is_some() }
+                    fallback=|| view! { <span></span> }
                 >
-                    <a class="btn text-start back mx-4" href="/catatan">
-                        <i class="bi bi-arrow-left-circle me-2"></i>Kembali
-                    </a>
+                    <Show
+                        when=move || { !slug.get().is_some() }
+                        fallback=move || {
+                            let cat = category.get().clone().unwrap_or("".to_string());
+                            view! { 
+                                <a class="btn text-start back" href={format!("/catatan/{}", cat)}>
+                                    <i class="bi bi-arrow-left-circle me-2"></i>Kembali
+                                </a>
+                            }
+                        }
+                    >
+                        <a class="btn text-start back" href="/catatan">
+                            <i class="bi bi-arrow-left-circle me-2"></i>Kembali
+                        </a>
+                    </Show>
                 </Show>
-            </Show>
+            </div>
             
             <div class="container section-title" data-aos="fade-left" data-aos-delay="100">
+                
                 <h2>Catatan {move || state.name.get()}</h2>
                 <Show
                     when=move || !state.title.get().is_empty()
@@ -60,7 +64,7 @@ pub fn CatatanLayout() -> impl IntoView {
                 </Show>
             </div>
 
-            <div class="container" data-aos="fade-left" data-aos-delay="200">
+            <div class="container" data-aos="fade-up" data-aos-delay="200">
     
                 <Outlet/>
 
