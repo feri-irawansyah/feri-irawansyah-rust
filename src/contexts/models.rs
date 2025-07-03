@@ -63,7 +63,7 @@ pub struct HashTagData {
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct Note {
-    pub note_id: i32,
+    pub notes_id: i32,
     pub title: String,
     pub category: String,
     pub slug: String,
@@ -74,7 +74,7 @@ pub struct Note {
 impl Note {
     pub fn new() -> Self {
         Note {
-            note_id: 0,
+            notes_id: 0,
             title: "".to_string(),
             category: "".to_string(),
             slug: "".to_string(),
@@ -86,8 +86,6 @@ impl Note {
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct NoteData {
-    pub result: bool,
-    pub message: String,
     pub data: Note,
 }
 

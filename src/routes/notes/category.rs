@@ -1,5 +1,6 @@
 use gloo_net::http::Request;
 use leptos::{prelude::*, task::spawn_local};
+use leptos_router::hooks::use_params_map;
 use crate::{app::BACKEND_URL, contexts::{index::format_wib_date, models::{AppState, Notes, NotesData}}};
 use wasm_bindgen::JsCast;
 use leptos::web_sys::HtmlImageElement;
@@ -7,6 +8,10 @@ use leptos::web_sys::HtmlImageElement;
 #[allow(non_snake_case)]
 #[component]
 pub fn Category() -> impl IntoView {
+    let params = use_params_map();
+    let category = Memo::new(move |_| {
+        params.with(|p| p.get("category"))
+    });
     let notes: RwSignal<Vec<Notes>> = RwSignal::new(vec![]);
     let (total, set_total) = signal(0);
     let (current_page, set_current_page) = signal(1);
@@ -15,13 +20,18 @@ pub fn Category() -> impl IntoView {
 
     let limit = 9;
 
+    let filter = serde_json::json!({
+        "category": category.get().unwrap_or_else(|| "".to_string())
+    });
+
     let fetch_notes = move |page: i32| {
         let offset = (page - 1) * limit;
         let url = format!(
-            "{}/data/table?tablename=notes&offset={}&limit={}&nidkey=notes_id",
+            "{}/data/table?tablename=notes&offset={}&limit={}&nidkey=notes_id&filter={}",
             BACKEND_URL,
             offset,
-            limit
+            limit,
+            urlencoding::encode(&filter.to_string())
         );
 
         spawn_local(async move {

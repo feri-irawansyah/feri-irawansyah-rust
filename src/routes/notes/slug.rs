@@ -1,5 +1,5 @@
 use gloo_net::http::Request;
-use leptos::{prelude::*, task::spawn_local};
+use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_params_map;
 use wasm_bindgen::JsCast;
 use leptos::web_sys::HtmlImageElement;
@@ -31,6 +31,8 @@ pub fn Slug() -> impl IntoView {
                 if let Ok(data) = response.json::<NoteData>().await {
                     notes.set(data.data);
                     state.title.set(notes.get().title.clone());
+                } else {
+                    console_log(format!("Error parsing JSON: {:?}", response.status()).as_str());
                 }
             }
             set_loading(false);

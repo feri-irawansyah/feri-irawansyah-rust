@@ -1,4 +1,4 @@
-use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos::prelude::*;
 
 use crate::{components::{about_tab::AboutTab, list_skill::ListSkill}, contexts::{index::hitung_usia, models::Skill}};
 
