@@ -8,8 +8,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::{
     components:: {
-        catatan_layout::CatatanLayout,
-        menu_list::MenuList
+        catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
     }, contexts::models::AppState, routes::{
         about::About, contact::Contact, home::Home, login::Login, notes::{
             category::Category, list_catatan::ListCatatan, slug::Slug
@@ -17,7 +16,7 @@ use crate::{
     }
 };
 
-pub const BACKEND_URL: &str = "https://snakesystem-web-api-tdam.shuttle.app/api/v1";
+pub const BACKEND_URL: &str = "https://snakesystem-api.shuttle.app/api/v1";
 
 #[wasm_bindgen(inline_js = "
     export function initAOS() {
@@ -83,6 +82,7 @@ pub fn App() -> impl IntoView {
         <Router>
             <main data-bs-theme="dark">
                 <div class="container-fluid">
+                    // <LoadingScreen visible=true/>
                     <div class="row">
                         <Show when=move || !state.is_notfound.get() >
                             <div class="col-lg-2 p-0">

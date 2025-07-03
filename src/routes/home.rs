@@ -17,7 +17,7 @@ pub fn Home() -> impl IntoView {
     let fetch_notes = move |page: i32| {
         let offset = (page - 1) * limit;
         let url = format!(
-            "{}/data/get-table?tablename=ViewNotes&offset={}&limit={}&nidkey=notes_id",
+            "{}/data/table?tablename=notes&offset={}&limit={}&nidkey=notes_id",
             BACKEND_URL,
             offset,
             limit

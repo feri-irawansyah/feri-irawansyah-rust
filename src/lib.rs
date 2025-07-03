@@ -27,6 +27,7 @@ pub mod components {
     pub mod clock;
     pub mod skill_slider;
     pub mod about_tab;
+    pub mod loading;
 }
 
 pub mod directives {

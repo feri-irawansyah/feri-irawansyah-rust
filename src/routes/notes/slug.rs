@@ -20,7 +20,7 @@ pub fn Slug() -> impl IntoView {
     Effect::new(move |_| {
 
         let url = format!(
-            "{}/library/get-single/{}",
+            "{}/library/get-library/{}",
             BACKEND_URL,
             slug_name
         );
@@ -43,7 +43,7 @@ pub fn Slug() -> impl IntoView {
             fallback=|| view! { <h1>Loading....</h1> }
         >
             <Show
-                when=move || { notes.get().content_md.is_empty() }
+                when=move || { notes.get().content.is_empty() }
                 fallback=move || {
                     view! { 
                         <div class="author d-flex flex-row align-items-start justify-content-start w-100">
@@ -66,7 +66,7 @@ pub fn Slug() -> impl IntoView {
                                     }/>
                             </div>
                             <div class="markdown-body">
-                                <MarkdownFromUrl url={notes.get().content_md}/>
+                                <MarkdownFromUrl url={notes.get().content}/>
                             </div>
                         </div>
                     }

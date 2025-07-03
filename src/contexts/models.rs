@@ -67,7 +67,7 @@ pub struct Note {
     pub title: String,
     pub category: String,
     pub slug: String,
-    pub content_md: String,
+    pub content: String,
     pub last_update: String
 }
 
@@ -78,7 +78,7 @@ impl Note {
             title: "".to_string(),
             category: "".to_string(),
             slug: "".to_string(),
-            content_md: "".to_string(),
+            content: "".to_string(),
             last_update: "".to_string()
         }
     }
