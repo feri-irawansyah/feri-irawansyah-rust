@@ -1777,131 +1777,77 @@ section,
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
+.login {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('/assets/img/hero-bg.jpeg');
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 
-.tab-content .nav-link {
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 0.8rem;
-}
+  .card {
+    z-index: 3;
+    width: 30% !important;
 
-h5.card-title {
-  color: #0077b5 !important;
-}
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: transparent;
+      border: none;
+      border-bottom: 2px dashed var(--contrast-color);
+      margin: 0 1rem;
 
-.modal-content {
-  background-color: var(--background-color);
-}
+      i {
+        font-size: 4rem;
+        padding: 0;
+      }
 
-.modal-body {
-  margin: 1rem 0;
-  background-color: var(--background-color);
-}
+      h5 {
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+    }
 
-.modal-header {
-  background-color: var(--background-color);
-}
+    .card-body {
+      display: flex;
+      width: 100% !important;
+      flex-direction: column;
+      align-items: center;
+      background-color: transparent;
+      border: none;
 
-.modal-header button {
-  background-color: var(--contrast-color);
-}
+      form {
+        text-align: center;
+        width: 100% !important;
 
-@media screen and (min-width: 768px) {
+        input {
+          text-align: center;
+        }
+      }
 
-  .mobile-title {
-    font-size: 1.5rem;
-  }
+      .btn-link {
+        margin-top: 1rem;
+        text-decoration: none;
 
-  .tab-content {
-    display: flex;
-    border-radius: 10px;
-  }
-  
-  /* Sidebar Tab jadi sticky */
-  .tab-content .nav.nav-tabs {
-    display: flex;
-    flex-direction: column;
-    position: sticky;
-    top: 50px;
-    align-self: flex-start;
-    height: fit-content;
-    /* Optional padding/background */
-    padding: 1rem;
-    border-radius: 10px;
-    background-color: color-mix(in srgb, var(--background-color), transparent 92%);
-    border: none;
-  }
-  
-  /* Item tab */
-  .tab-content .nav.nav-tabs .nav-item {
-    padding: 1rem;
-    border-radius: 8px;
-    font-size: 18px;
-    transition: all 0.3s ease-out;
-    cursor: pointer;
-    text-align: center;
-    margin-bottom: 0.5rem;
-    text-transform: capitalize;
-  }
-
-  .tab-content .nav.nav-tabs .nav-item .nav-link {
-    width: 100%;
-    border: none;
-    padding: 1rem;
-    background-color: color-mix(in srgb, var(--default-color), transparent 92%);
-    border-radius: 10px;
-  }
-
-  .tab-content .nav.nav-tabs .nav-item .nav-link.active {
-    background-color: var(--accent-color);
-    color: var(--contrast-color);
-  }
-
-  .tab-content .tab-pane {
-    padding: 0 1rem;
+        &:hover {
+          text-decoration: underline;
+          background-color: saddlebrown;
+        }
+      }
+    }
   }
 }
-@media screen and (max-width: 768px) {
-  .tab-content .nav.nav-tabs {
-    display: flex;
-    flex-direction: row;
-    position: sticky;
-    top: 60px;
-    height: fit-content;
-    /* Optional padding/background */
-    border-radius: 10px;
-    background-color: color-mix(in srgb, var(--background-color), transparent 92%);
-  }
-}
-
-.badge-experience {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: linear-gradient(to right, #007bff, #00c6ff);
-    color: white;
-    font-weight: 600;
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    transition: transform 0.2s ease;
-}
-
-.badge-experience:hover {
-    transform: scale(1.05);
-}
-
-.badge-experience .label {
-    background-color: rgba(255, 255, 255, 0.15);
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-experience .value {
-    font-size: 16px;
+.login:before {
+  content: "";
+  background: color-mix(in srgb, var(--background-color), transparent 40%);
+  position: absolute;
+  inset: 0;
+  z-index: 2;
 }
 
 .notfound {
@@ -1914,23 +1860,23 @@ h5.card-title {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
+    z-index: 999999;
     color: white;
     font-size: 24px;
-    opacity: 0;
-    animation: fadeIn 0.3s ease-in-out forwards;
+    opacity: 1;
+    animation: fadeIn 1s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
     to {
-        opacity: 1;
+        opacity: 0;
     }
 }
 

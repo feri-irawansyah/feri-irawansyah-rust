@@ -1,7 +1,5 @@
-use gloo_net::http::Request;
 use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_sweetalert::*;
-use leptos::web_sys;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
     components::{ParentRoute, Route, Router, Routes}, StaticSegment, WildcardSegment
@@ -11,7 +9,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use crate::{
     components:: {
         admin_layout::AdminLayout, catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
-    }, contexts::models::AppState, routes::{
+    }, contexts::models::AppState, middleware::session::check_session, routes::{
         about::About, admin::{dashboard::Dashboard, notes_management::NotesManagement, user_management::UserManagement}, contact::Contact, home::Home, login::Login, notes::{
             category::Category, list_catatan::ListCatatan, slug::Slug
         }, notfound::NotFound, portfolio::Portfolio, services::Services
@@ -58,8 +56,8 @@ pub fn App() -> impl IntoView {
         count: RwSignal::new(0),
         name: RwSignal::new("Feri Irawansyah".to_string()),
         title: RwSignal::new("".to_string()),
+        loading: RwSignal::new(false),
     };
-    let (loading, set_loading) = signal(false);
 
     // Register biar bisa dipakai semua komponen
     provide_context(global_state);
@@ -68,25 +66,7 @@ pub fn App() -> impl IntoView {
         initAOS(); // ini panggil JS function
     });
 
-    spawn_local({
-        async move {
-            set_loading(true);
-            let resp = Request::get(format!("{}/auth/session", BACKEND_URL).as_str())
-                .credentials(web_sys::RequestCredentials::Include) // penting kalau pakai cookie/session
-                .send()
-                .await;
-
-            match resp {
-                Ok(response) => {
-                    if response.status() == 200 {
-                        console_log(format!("Session: {:#?}", response).as_str());
-                    }
-                }
-                Err(_) =>  console_log("Failed to connect"),
-            }
-            set_loading(false);
-        }
-    });
+    let state = expect_context::<AppState>();
 
     view! {
         // injects a stylesheet into the document <head>
@@ -100,9 +80,9 @@ pub fn App() -> impl IntoView {
 
         // content for this welcome page
         <Router>
-            <main data-bs-theme="dark">
-                <LoadingScreen visible=loading/>
-                <div class="container-fluid">
+        <main data-bs-theme="dark">
+            <div class="container-fluid">
+                <LoadingScreen visible=state.loading/>
                     <div class="row">
                         <Routes fallback=move || "Not found.">
                             <ParentRoute path=leptos_router::path!("/") view=MenuList>

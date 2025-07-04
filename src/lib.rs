@@ -22,7 +22,6 @@ pub mod routes {
         pub mod notes_management;
     }
 }
-
 pub mod components {
     pub mod catatan_layout;
     pub mod menu_list;
@@ -34,9 +33,11 @@ pub mod components {
     pub mod about_tab;
     pub mod loading;
 }
-
 pub mod directives {
     pub mod alert_context;
+}
+pub mod middleware {
+    pub mod session;
 }
 
 #[cfg(feature = "hydrate")]

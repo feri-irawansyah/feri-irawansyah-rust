@@ -10,17 +10,25 @@ pub struct SessionData {
     // tambah field lain kalau perlu
 }
 
-#[derive(Deserialize)]
-struct SessionResponse {
-    data: SessionData,
+impl SessionData {
+    pub fn new() -> Self {
+        SessionData {
+            user_id: 0,
+        }
+    }
 }
 
-#[derive(Deserialize)]
-struct ErrorResponse {
-    error: String,
+#[derive(Deserialize, Debug, Clone)]
+pub struct SessionResponse {
+    pub data: SessionData,
 }
 
-pub async fn check_session() -> Result<SessionData, String> {
+#[derive(Deserialize, Debug, Clone)]
+pub struct ErrorResponse {
+    pub error: String,
+}
+
+pub async fn check_session() -> Result<SessionData, ErrorResponse> {
 
     // let navigate = leptos_router::hooks::use_navigate();
 
@@ -35,13 +43,10 @@ pub async fn check_session() -> Result<SessionData, String> {
                 let session: SessionResponse = response.json().await.unwrap();
                 Ok(session.data)
             } else {
-                let err: ErrorResponse = response.json().await.unwrap_or(ErrorResponse {
-                    error: "Unknown error".to_string(),
-                });
-                // navigate("/login", Default::default());
-                Err(err.error)
+                let error: ErrorResponse = response.json().await.unwrap();
+                Err(error)
             }
         }
-        Err(_) => Err("Failed to connect".to_string()),
+        Err(_) => Err(ErrorResponse { error: "Network error".to_string() }),
     }
 }
