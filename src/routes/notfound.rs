@@ -1,7 +1,5 @@
 use leptos::prelude::*;
 
-use crate::contexts::models::AppState;
-
 #[allow(non_snake_case)]
 #[component]
 pub fn NotFound() -> impl IntoView {
@@ -19,14 +17,7 @@ pub fn NotFound() -> impl IntoView {
         resp.set_status(actix_web::http::StatusCode::NOT_FOUND);
     }
 
-    let state = expect_context::<AppState>();
-
-    Effect::new(move |_| {
-        state.is_notfound.set(true);
-    });
-
     let go_back_and_reload = move |_| {
-        state.is_notfound.set(false);
         // Kembali ke halaman sebelumnya
         window().history().unwrap().back().ok();
     };

@@ -113,6 +113,5 @@ pub struct SkillsData {
 pub struct AppState {
     pub count: RwSignal<i32>,
     pub name: RwSignal<String>,
-    pub title: RwSignal<String>,
-    pub is_notfound: RwSignal<bool>
+    pub title: RwSignal<String>
 }

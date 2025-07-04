@@ -1,5 +1,7 @@
-use leptos::prelude::*;
+use gloo_net::http::Request;
+use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_sweetalert::*;
+use leptos::web_sys;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
     components::{ParentRoute, Route, Router, Routes}, StaticSegment, WildcardSegment
@@ -8,9 +10,9 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::{
     components:: {
-        catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
+        admin_layout::AdminLayout, catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
     }, contexts::models::AppState, routes::{
-        about::About, contact::Contact, home::Home, login::Login, notes::{
+        about::About, admin::{dashboard::Dashboard, notes_management::NotesManagement, user_management::UserManagement}, contact::Contact, home::Home, login::Login, notes::{
             category::Category, list_catatan::ListCatatan, slug::Slug
         }, notfound::NotFound, portfolio::Portfolio, services::Services
     }
@@ -56,8 +58,8 @@ pub fn App() -> impl IntoView {
         count: RwSignal::new(0),
         name: RwSignal::new("Feri Irawansyah".to_string()),
         title: RwSignal::new("".to_string()),
-        is_notfound: RwSignal::new(false)
     };
+    let (loading, set_loading) = signal(false);
 
     // Register biar bisa dipakai semua komponen
     provide_context(global_state);
@@ -66,7 +68,25 @@ pub fn App() -> impl IntoView {
         initAOS(); // ini panggil JS function
     });
 
-    let state = expect_context::<AppState>();
+    spawn_local({
+        async move {
+            set_loading(true);
+            let resp = Request::get(format!("{}/auth/session", BACKEND_URL).as_str())
+                .credentials(web_sys::RequestCredentials::Include) // penting kalau pakai cookie/session
+                .send()
+                .await;
+
+            match resp {
+                Ok(response) => {
+                    if response.status() == 200 {
+                        console_log(format!("Session: {:#?}", response).as_str());
+                    }
+                }
+                Err(_) =>  console_log("Failed to connect"),
+            }
+            set_loading(false);
+        }
+    });
 
     view! {
         // injects a stylesheet into the document <head>
@@ -81,22 +101,11 @@ pub fn App() -> impl IntoView {
         // content for this welcome page
         <Router>
             <main data-bs-theme="dark">
+                <LoadingScreen visible=loading/>
                 <div class="container-fluid">
-                    // <LoadingScreen visible=true/>
                     <div class="row">
-                        <Show when=move || !state.is_notfound.get() >
-                            <div class="col-lg-2 p-0">
-                                <MenuList/>
-                            </div>
-                        </Show>
-                        <div class=move || {
-                            if state.is_notfound.get() {
-                                "col-12 p-0"
-                            } else {
-                                "col-lg-10 p-0"
-                            }
-                        }>
-                            <Routes fallback=move || "Not found.">
+                        <Routes fallback=move || "Not found.">
+                            <ParentRoute path=leptos_router::path!("/") view=MenuList>
                                 <Route path=StaticSegment("") view=Home/>
                                 <Route path=StaticSegment("about") view=About/>
                                 <Route path=StaticSegment("services") view=Services/>
@@ -107,10 +116,15 @@ pub fn App() -> impl IntoView {
                                     <Route path=leptos_router::path!(":category/:slug") view=Slug />
                                 </ParentRoute>
                                 <Route path=StaticSegment("contact") view=Contact/>
-                                <Route path=StaticSegment("login") view=Login/>
-                                <Route path=WildcardSegment("any") view=NotFound/>
-                            </Routes>
-                        </div>
+                            </ParentRoute>
+                            <ParentRoute path=leptos_router::path!("/admin") view=AdminLayout>
+                                <Route path=leptos_router::path!("") view=Dashboard />
+                                <Route path=leptos_router::path!("user") view=UserManagement />
+                                <Route path=leptos_router::path!("notes-management") view=NotesManagement />
+                            </ParentRoute>
+                            <Route path=StaticSegment("login") view=Login/>
+                            <Route path=WildcardSegment("any") view=NotFound/>
+                        </Routes>
                     </div>
                 </div>
             </main>

@@ -178,16 +178,22 @@ pub fn Skills() -> impl IntoView {
                         </div>
                     }>
                         {move || {
-                            let list_skill = skills;
-                            list_skill.get().iter().map(|skill| {
+                            let list_skill = skills.get().clone();
+                            list_skill.iter().map(|skill| {
+                                let max = 5;
+                                let rating = skill.star;
                                 view! {
                                     <div class="col-6 col-lg-3 col-md-2 list-skill">
                                         <div class="card">
                                             <div class="card-header d-flex justify-content-between">
                                                 <h5 class="card-title">{skill.title.clone()}</h5>
-                                                {move || { 
-                                                    
-                                                 }}
+                                                {move || {
+                                                    (0..max).map(|i| {
+                                                        view! { 
+                                                            <i class=format!("bi bi-star-fill{}", if i < rating { " text-warning" } else { "" })></i>
+                                                         }
+                                                    }).collect_view()
+                                                }}
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">

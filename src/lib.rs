@@ -16,12 +16,18 @@ pub mod routes {
         pub mod slug;
         pub mod list_catatan;
     }
+    pub mod admin {
+        pub mod dashboard;
+        pub mod user_management;
+        pub mod notes_management;
+    }
 }
 
 pub mod components {
     pub mod catatan_layout;
-    pub mod sweet_alert;
     pub mod menu_list;
+    pub mod admin_layout;
+    pub mod sweet_alert;
     pub mod markdown;
     pub mod clock;
     pub mod skill_slider;

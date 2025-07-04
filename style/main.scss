@@ -238,9 +238,8 @@ h6 {
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  // background-color: #404449;
   overflow-y: auto;
-  padding: 2rem 0;
+  padding: 2rem 0 !important;
 
   .real-image {
     width: 1.1rem !important;

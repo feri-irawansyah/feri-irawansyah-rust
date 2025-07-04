@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_router::{hooks::use_location, location::Location};
+use leptos_router::{components::Outlet, hooks::use_location, location::Location};
 
 use crate::contexts::models::AppState;
 
@@ -11,7 +11,7 @@ pub fn MenuList() -> impl IntoView {
     let state = expect_context::<AppState>();
 
     view! {
-        <div class="menu-list">
+        <div class="menu-list col-2 p-0">
             <img src="/assets/img/feri.jpg" alt="feri" class="rounded-circle img-fluid about-img mb-1" />
             <h5 class="fw-bold mb-0">{move || state.name.get()}<img class="real-image" src="/assets/img/real.png" alt="feri" /></h5>
             <p class="mt-0">Software Engineer From Indonesia</p>
@@ -30,6 +30,10 @@ pub fn MenuList() -> impl IntoView {
                     Powered by <a href="https://leptos.dev">Rust Leptos</a> <i>"❤️"</i>
                 </div>
             </div>
+        </div>
+
+        <div class="col-10 p-0">
+            <Outlet />
         </div>
     }
 }
