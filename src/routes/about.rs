@@ -1,6 +1,7 @@
-use leptos::prelude::*;
+use gloo_net::http::Request;
+use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 
-use crate::{components::{about_tab::AboutTab, list_skill::ListSkill}, contexts::{index::hitung_usia, models::Skill}};
+use crate::{app::BACKEND_URL, components::about_tab::AboutTab, contexts::{index::hitung_usia, models::{Skill, SkillsData}}};
 
 #[allow(non_snake_case)]
 #[component]
@@ -99,9 +100,9 @@ pub fn Experience() -> impl IntoView {
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex-column experience-right">
-                                <button class="btn" type="button"><i class="bi bi-eye"></i> Preview</button>
-                                <button class="btn" type="button"><i class="bi bi-download"></i> Download</button>
+                            <div class="flex-column experience-right justify-content-end me-3">
+                                <button class="btn" type="button"><i class="bi bi-eye me-2"></i> <span>Preview</span></button>
+                                <button class="btn" type="button"><i class="bi bi-download me-2"></i> <span>Download</span></button>
                             </div>
                         </div>
                     </div>
@@ -115,38 +116,99 @@ pub fn Experience() -> impl IntoView {
 #[component]
 pub fn Skills() -> impl IntoView {
     
-    let skills = vec![
-        Skill {
-            name: "Rust",
-            description: "Bahasa pemrograman sistem aman dan cepat.",
-            experience: "3 Tahun",
-            level: "Advanced",
-        },
-        Skill {
-            name: "Actix",
-            description: "Framework web performa tinggi untuk Rust.",
-            experience: "2 Tahun",
-            level: "Intermediate",
-        },
-    ];
+    let skills: RwSignal<Vec<Skill>> = RwSignal::new(vec![]);
+    let (loading, set_loading) = signal(false);
+    let current_page = RwSignal::new(1);
+    let limit = 50;
 
-    let selected_skill = RwSignal::new(Some(skills[0].clone()));
+    let fetch_notes = move |page: i32| {
+        let offset = (page - 1) * limit;
+        let url = format!(
+            "{}/data/table?tablename=skills&offset={}&limit={}&nidkey=skill_id",
+            BACKEND_URL,
+            offset,
+            limit
+        );
+
+        spawn_local(async move {
+            set_loading(true);
+            if let Ok(response) = Request::get(&url).send().await {
+                if response.status() == 200 {
+                    if let Ok(data) = response.json::<SkillsData>().await {
+                        skills.set(data.rows);
+                    }
+                } else {
+                    console_log(format!("Error: {}", response.status()).as_str());
+                }
+            }
+            set_loading(false);
+        });
+    };
+
+    Effect::new(move |_| {
+        fetch_notes(current_page.get());
+    });
 
     view! {
-        <div data-aos="slide-right">
+        <div data-aos="slide-right" class="skills">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 mb-3">
                     <div class="card">
-                        <div class="d-flex justify-content-between">
-                            <div class="flex-column">
-                                <i class="bi bi-briefcase"></i>
-                            </div>
-                            <div class="flex-column">
-                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExperience" aria-expanded="false" aria-controls="collapseExperience"></button>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Skills</h5>
                         </div>
                     </div>
                 </div>
+                <Show when=move || !loading.get() fallback=move || view! { 
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Loading...</h5>
+                            </div>
+                        </div>
+                    </div>
+                 }>
+                    <Show when=move || !skills.get().is_empty() fallback=move || view! { 
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">No Data</h5>
+                                </div>
+                            </div>
+                        </div>
+                    }>
+                        {move || {
+                            let list_skill = skills;
+                            list_skill.get().iter().map(|skill| {
+                                view! {
+                                    <div class="col-6 col-lg-3 col-md-2 list-skill">
+                                        <div class="card">
+                                            <div class="card-header d-flex justify-content-between">
+                                                <h5 class="card-title">{skill.title.clone()}</h5>
+                                                {move || { 
+                                                    
+                                                 }}
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <img class="img-fluid" src=format!("/assets/img/skills/{}.png", skill.title.to_lowercase()) alt=skill.title.clone() />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p class="card-text">{skill.description.clone()}</p>
+                                                        <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                            <div class="progress-bar" style=format!("width: {}%", skill.progress)>{skill.progress}%</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }).collect_view()
+                        }}
+                    </Show>
+                </Show>
             </div>
         </div>
     }

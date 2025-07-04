@@ -1,12 +1,16 @@
 use leptos::prelude::*;
 use serde::Deserialize; 
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct Skill {
-    pub name: &'static str,
-    pub description: &'static str,
-    pub experience: &'static str,
-    pub level: &'static str,
+    pub skill_id: i32,
+    pub title: String,
+    pub description: String,
+    pub url_docs: String,
+    pub image_src: String,
+    pub progress: i32,
+    pub star: i32,
+    pub experience: Option<i32>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -92,6 +96,14 @@ pub struct NoteData {
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct NotesData {
     pub rows: Vec<Notes>,
+    #[allow(non_snake_case)]
+    pub totalNotFiltered: usize,
+    pub total: usize,
+}
+
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct SkillsData {
+    pub rows: Vec<Skill>,
     #[allow(non_snake_case)]
     pub totalNotFiltered: usize,
     pub total: usize,
