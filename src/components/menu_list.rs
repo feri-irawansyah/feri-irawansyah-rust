@@ -33,6 +33,9 @@ pub fn MenuList() -> impl IntoView {
         </div>
 
         <div class="col-10 p-0">
+            <a href="/admin" class={format!("btn btn-primary mb-3 to-dashboard {}", if state.session.get().usernid == 0 { "" } else { "d-none"})}>
+                <i class="bi bi-house-door-fill me-2"></i><span>Dashboard</span>
+            </a>
             <Outlet />
         </div>
     }

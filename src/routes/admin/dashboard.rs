@@ -4,7 +4,7 @@ use leptos::prelude::*;
 #[component]
 pub fn Dashboard() -> impl IntoView {
     view! {
-        <div>
+        <div class="dashboard">
             Dashboard
         </div>
     }

@@ -4,7 +4,7 @@ use leptos::prelude::*;
 #[component]
 pub fn NotesManagement() -> impl IntoView {
     view! {
-        <div>
+        <div class="notes-management">
             Notes Management
         </div>
     }

@@ -43,6 +43,7 @@ async fn main() -> std::io::Result<()> {
                                 <MetaTags/>
                                 <script src="/js/bootstrap.bundle.min.js"></script>
                                 <script src="/js/aos.min.js"></script>
+                                <script src="/js/marquee.js"></script>
                             </head>
                             <body class="dark-background"> 
                                 <App/>

@@ -1,5 +1,23 @@
 use leptos::prelude::*;
-use serde::Deserialize; 
+use serde::{Deserialize, Serialize};
+
+use crate::middleware::session::SessionData; 
+
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct SuccessResponse<T> {
+    pub data: Option<T>,
+}
+
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct ErrorResponse<E> {
+    pub data: Option<E>,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct LoginRequest {
+    pub email: String,
+    pub password: String
+}
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct Skill {
@@ -10,7 +28,7 @@ pub struct Skill {
     pub image_src: String,
     pub progress: i32,
     pub star: i32,
-    pub experience: Option<i32>,
+    pub experience: i32,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -115,4 +133,5 @@ pub struct AppState {
     pub name: RwSignal<String>,
     pub title: RwSignal<String>,
     pub loading: RwSignal<bool>,
+    pub session: RwSignal<SessionData>
 }

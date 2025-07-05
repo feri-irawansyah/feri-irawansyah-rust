@@ -112,56 +112,11 @@ h6 {
   font-family: var(--heading-font);
 }
 
-/* PHP Email Form Messages
-------------------------------*/
-.php-email-form .error-message {
-  display: none;
-  background: #df1529;
-  color: #ffffff;
-  text-align: left;
-  padding: 15px;
-  margin-bottom: 24px;
-  font-weight: 600;
-}
-
-.php-email-form .sent-message {
-  display: none;
-  color: #ffffff;
-  background: #059652;
-  text-align: center;
-  padding: 15px;
-  margin-bottom: 24px;
-  font-weight: 600;
-}
-
-.php-email-form .loading {
-  display: none;
-  background: var(--surface-color);
-  text-align: center;
-  padding: 15px;
-  margin-bottom: 24px;
-}
-
-.php-email-form .loading:before {
-  content: "";
-  display: inline-block;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  margin: 0 10px -6px 0;
-  border: 3px solid var(--accent-color);
-  border-top-color: var(--surface-color);
-  animation: php-email-form-loading 1s linear infinite;
-}
-
-@keyframes php-email-form-loading {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+.to-dashboard {
+  position: absolute !important;
+  z-index: 1;
+  right: 1rem;
+  top: 1rem;
 }
 
 /*--------------------------------------------------------------
@@ -873,6 +828,34 @@ section,
 
       button:hover {
         background-color: var(--accent-color);
+      }
+    }
+  }
+
+  .skills {
+    .list-skill {
+      .card {
+        .card-header {
+          .ms-auto {
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            gap: 0.5rem;
+          }
+        }
+        .card-body {
+          .col-md-4 {
+            padding: 1px !important;
+          }
+          img {
+            background-color: rgb(116, 116, 116);
+            border-radius: 10px;
+          }
+          .card-text {
+            font-size: 14px;
+          }
+        }
       }
     }
   }
@@ -1895,3 +1878,158 @@ section,
         transform: rotate(360deg);
     }
 }
+
+.marquee-custom  {
+  .marquee-text  {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    img {
+      width: 3rem;
+      border-radius: 5px;
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+# Admin Section
+--------------------------------------------------------------*/
+.admin-layout {
+  height: 100vh;
+  .row {
+    height: 100%;
+  }
+
+  .sidebar {
+    background-color: #343a40;
+    color: white;
+    height: 100vh;
+    transition: width 0.3s ease;
+    width: 220px;
+    overflow-x: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1030; // supaya di atas navbar
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        a {
+          display: flex;
+          align-items: center;
+          padding: 12px 20px;
+          color: white;
+          text-decoration: none;
+          transition: background 0.2s;
+
+          i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+          }
+
+          &:hover {
+            background-color: #495057;
+          }
+        }
+      }
+
+      .logo a {
+        display: flex;
+        flex-direction: column !important;
+        align-items: start;
+        img {
+          padding: 0 !important;
+          width: 3rem;
+        }
+        h5 {
+          display: flex;
+          font-size: 1.2rem;
+          font-weight: bold;
+          align-items: center;
+          img {
+            width: 1.2rem;
+            height: 1.2rem;
+          }
+        }
+      }
+    }
+
+    &.collapsed {
+      width: 80px;
+
+      .logo a {
+        h5, p {
+          display: none;
+        }
+      }
+
+      ul li a span {
+        opacity: 0;
+      }
+
+      ul li a i {
+        margin-left: 0.5rem;
+        text-align: center;
+        width: 100%;
+      }
+    }
+  }
+
+  .main-area {
+    transition: margin-left 0.3s ease;
+    margin-left: 220px;
+    width: 100%;
+    // max-height: 100vh;
+    padding-left: 20px;
+
+    .navbar {
+      // background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      padding: 10px 20px;
+
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+
+        .menu-toggle {
+          border: none;
+          background: none;
+          font-size: 24px;
+          margin-right: 15px;
+          cursor: pointer;
+        }
+      }
+
+      .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        a {
+          font-size: 1.2rem;
+          padding: 0 0 0 2rem;
+        }
+      }
+
+      .navbar-nav a {
+        margin-right: 15px;
+      }
+    }
+
+    .content {
+      padding: 20px;
+      height: calc(100vh - 56px); // assuming navbar 56px
+      overflow-y: auto;
+      height: auto;
+    }
+
+    &.expanded {
+      margin-left: 80px;
+    }
+  }
+}
+

@@ -2,14 +2,14 @@ use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_sweetalert::*;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
-    components::{ParentRoute, Route, Router, Routes}, StaticSegment, WildcardSegment
+    components::{ParentRoute, Route, Router, Routes}, hooks::use_navigate, StaticSegment, WildcardSegment
 };
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::{
     components:: {
         admin_layout::AdminLayout, catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
-    }, contexts::models::AppState, middleware::session::check_session, routes::{
+    }, contexts::models::AppState, middleware::session::{check_session, SessionData}, routes::{
         about::About, admin::{dashboard::Dashboard, notes_management::NotesManagement, user_management::UserManagement}, contact::Contact, home::Home, login::Login, notes::{
             category::Category, list_catatan::ListCatatan, slug::Slug
         }, notfound::NotFound, portfolio::Portfolio, services::Services
@@ -29,7 +29,6 @@ pub const BACKEND_URL: &str = "https://snakesystem-api.shuttle.app/api/v1";
             disableMutationObserver: false, 
             debounceDelay: 50,
             throttleDelay: 99, 
-            
             offset: -9999, 
             delay: 0, 
             duration: 400, 
@@ -37,7 +36,6 @@ pub const BACKEND_URL: &str = "https://snakesystem-api.shuttle.app/api/v1";
             once: false, 
             mirror: false, 
             anchorPlacement: 'top-center',
-
         });
     }
 ")]
@@ -57,6 +55,7 @@ pub fn App() -> impl IntoView {
         name: RwSignal::new("Feri Irawansyah".to_string()),
         title: RwSignal::new("".to_string()),
         loading: RwSignal::new(false),
+        session: RwSignal::new(SessionData::new())
     };
 
     // Register biar bisa dipakai semua komponen
@@ -64,6 +63,26 @@ pub fn App() -> impl IntoView {
 
     Effect::new(move |_| {
         initAOS(); // ini panggil JS function
+    });
+
+    let state = expect_context::<AppState>();
+
+    Effect::new(move |_| {
+        let navigate = use_navigate();
+        spawn_local(async move { 
+            state.loading.set(true);
+            let response = check_session().await;
+            match response {
+                Ok(session) => {
+                    state.session.set(session);
+                }
+                Err(error) => {
+                    console_log(format!("Error: {:#?}", error).as_str());
+                    navigate("/login", Default::default());
+                }
+            }
+            state.loading.set(false);
+        });
     });
 
     let state = expect_context::<AppState>();

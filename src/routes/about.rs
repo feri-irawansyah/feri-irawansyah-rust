@@ -187,18 +187,20 @@ pub fn Skills() -> impl IntoView {
                                         <div class="card">
                                             <div class="card-header d-flex justify-content-between">
                                                 <h5 class="card-title">{skill.title.clone()}</h5>
-                                                {move || {
-                                                    (0..max).map(|i| {
-                                                        view! { 
-                                                            <i class=format!("bi bi-star-fill{}", if i < rating { " text-warning" } else { "" })></i>
-                                                         }
-                                                    }).collect_view()
-                                                }}
+                                                <div class="ms-auto d-flex justify-content-between">
+                                                    {move || {
+                                                        (0..max).map(|i| {
+                                                            view! { 
+                                                                <i class=format!("bi bi-star-fill{}", if i < rating { " text-warning" } else { "" })></i>
+                                                            }
+                                                        }).collect_view()
+                                                    }}
+                                                </div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <img class="img-fluid" src=format!("/assets/img/skills/{}.png", skill.title.to_lowercase()) alt=skill.title.clone() />
+                                                        <img class="img-fluid" src=format!("/assets/{}", skill.image_src.clone()) alt=skill.title.clone() />
                                                     </div>
                                                     <div class="col-md-8">
                                                         <p class="card-text">{skill.description.clone()}</p>

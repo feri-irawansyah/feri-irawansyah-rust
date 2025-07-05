@@ -87,15 +87,58 @@ pub fn Home() -> impl IntoView {
                                 }).collect_view()}
                             }}
                         </div>
-                        <div class="row" data-aos="slide-right" data-aos-delay="300">
-                            <h4 class="fw-bold">My <span class="text-primary">Tech Stack</span></h4>
-                            <div class="card">
-                                
-                            </div>
-                        </div>
+                        // <div class="row" data-aos="slide-right" data-aos-delay="300">
+                        //     <h4 class="fw-bold">My <span class="text-primary">Tech Stack</span></h4>
+                        //     <div class="card">
+                        //         <SkillMarquee/>
+                        //     </div>
+                        // </div>
                     </div>
                 </div>
             </div>
         </section>
+    }
+}
+
+use serde::Deserialize;
+
+#[derive(Debug, Clone, Deserialize)]
+struct Skill {
+    image_src: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct SkillResponse {
+    rows: Vec<Skill>,
+}
+
+#[allow(non_snake_case)]
+#[component]
+pub fn SkillMarquee() -> impl IntoView {
+
+    let skills = RwSignal::new(vec![]);
+
+    Effect::new(move |_| {
+        spawn_local(async move {
+            if let Ok(response) = Request::get("https://snakesystem-api.shuttle.app/api/v1/data/table?tablename=skills&offset=0&limit=50&nidkey=skill_id").send().await {
+                if let Ok(data) = response.json::<SkillResponse>().await {
+                    skills.set(data.rows);
+                }
+            }
+        });
+    });
+
+    view! {
+        <div class="marquee-custom">
+            {move || {
+                let skills_clone = skills.get().clone();
+                {skills_clone.iter().map(|skill| view! {
+                    <div class="marquee-text">
+                        <img src=format!("/assets/{}", skill.image_src.clone())/>
+                    </div>
+                }).collect_view()}
+            }}
+        </div>
+
     }
 }

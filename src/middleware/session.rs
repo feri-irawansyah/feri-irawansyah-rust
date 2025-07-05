@@ -4,16 +4,27 @@ use leptos::*;
 
 use crate::app::BACKEND_URL;
 
-#[derive(Deserialize, Debug, Clone)]
+#[derive(Deserialize, Debug, Clone, PartialEq, Default)]
 pub struct SessionData {
-    pub user_id: i32,
-    // tambah field lain kalau perlu
+    pub usernid: i32,
+    pub email: String,
+    pub fullname: String,
+    pub picture: String,
+    pub register_date: String,
+    pub ip_address: String,
+    pub error: Option<String>,
 }
 
 impl SessionData {
     pub fn new() -> Self {
         SessionData {
-            user_id: 0,
+            usernid: 0,
+            email: "".to_string(),
+            fullname: "".to_string(),
+            picture: "".to_string(),
+            register_date: "".to_string(),
+            ip_address: "".to_string(),
+            error: None
         }
     }
 }

@@ -1,38 +1,61 @@
-use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
-use leptos_router::{components::Outlet, hooks::use_navigate};
+use leptos::prelude::*;
+use leptos_router::components::Outlet;
 
-use crate::{contexts::models::AppState, middleware::session::{check_session, SessionData, SessionResponse}};
+use crate::{contexts::models::AppState};
 
 #[allow(non_snake_case)]
 #[component]
 pub fn AdminLayout() -> impl IntoView {
     let state = expect_context::<AppState>();
-    let session = RwSignal::new(SessionResponse { data: SessionData::new() });
-    Effect::new(move |_| {
-        let navigate = use_navigate();
-        spawn_local(async move { 
-            state.loading.set(true);
-            let response = check_session().await;
-            match response {
-                Ok(session) => {
-                    console_log(format!("Session: {:#?}", session).as_str());
-                }
-                Err(error) => {
-                    console_log(format!("Error: {:#?}", error).as_str());
-                    navigate("/login", Default::default());
-                }
-            }
-            state.loading.set(false);
-        });
-    });
+    let is_open = RwSignal::new(true);
+
     view! {
-        <Show when=move || session.get().data.user_id != 0 fallback=|| view! { <span></span>} >
-            <div class="container-fluid">
-                <div class="row">
-                    Menu
-                </div>
-                <div class="row">
-                    <Outlet />
+        <Show when=move || state.session.get().usernid != 0 fallback=|| view! { <span></span>} >
+            <div class="container-fluid admin-layout" data-aos="fade-left">
+                <div class="d-flex">
+                    <div class=move || {
+                            if is_open.get() {
+                                "sidebar"
+                            } else {
+                                "sidebar collapsed"
+                            }
+                        }>
+                        <ul>
+                            <li class="logo"><a href="/">
+                                <img src="/assets/img/logo-ss.png" alt="feri" class="rounded-circle img-fluid about-img mb-1" /> 
+                                <h5>Feri Irawansyah <img class="real-image" src="/assets/img/real.png" alt="feri" /></h5>
+                                <p>Software Engineer</p>
+                            </a></li>
+                            <li><a href="/admin"><i class="bi bi-grid"></i> <span>Dashboard</span></a></li>
+                            <li><a href="/admin/user"><i class="bi bi-person"></i> <span>User Management</span></a></li>
+                            <li><a href="/admin/notes-management"><i class="bi bi-journal-code"></i><span>Notes Management</span></a></li>
+                            <li><a href="/admin/settings"><i class="bi bi-gear"></i> <span>Settings</span></a></li>
+                        </ul>
+                    </div>
+                    <div class=move || {
+                            if is_open.get() {
+                                "main-area"
+                            } else {
+                                "main-area expanded"
+                            }
+                        }>
+                        <nav class="navbar">
+                            <div class="container-fluid">
+                                <div class="navbar-brand">
+                                    <button class="menu-toggle" on:click=move |_| is_open.set(!is_open.get())><i class="bi bi-list"></i></button>
+                                    <h5 class="fw-bold mb-0">Snakesystem Admin Area</h5>
+                                </div>
+                                <div class="navbar-nav">
+                                    <a class="nav-link"><i class="bi bi-bell"></i></a>
+                                    <a class="nav-link"><i class="bi bi-person"></i></a>
+                                    <a class="nav-link"><i class="bi bi-box-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </nav>
+                        <div class="content">
+                            <Outlet />
+                        </div>
+                    </div>
                 </div>
             </div>
         </Show>

@@ -1,5 +1,9 @@
-use leptos::prelude::*;
+use leptos::web_sys;
+use leptos::{prelude::*, task::spawn_local};
+use leptos_router::hooks::use_navigate;
 use leptos_sweetalert::{Swal, SwalIcon, SwalOptions};
+
+use crate::{app::BACKEND_URL, contexts::models::{LoginRequest, SuccessResponse}};
 
 #[allow(non_snake_case)]
 #[component]
@@ -7,37 +11,56 @@ pub fn Login() -> impl IntoView {
     // state untuk username & password
     let email = RwSignal::new("".to_string());
     let password = RwSignal::new("".to_string());
+    let navigate = use_navigate();
 
     // handler tombol login
-    let on_submit = Action::new(move |_: &()| {
+    let on_submit = move |ev: web_sys::SubmitEvent| {
+        ev.prevent_default();
         let email = email.get();
         let password = password.get();
-        
-        async move {
+        let navigate = navigate.clone();
 
-            if email == "admin" && password == "admin" {
-                Swal::fire(SwalOptions {
-                    title: "This is a title",
-                    text: "This is some text",
-                    icon: SwalIcon::SUCCESS,
-                    confirm_button_text: "LETS GO",
-                    show_cancel_button: true,
-                    show_deny_button: true,
-                    ..SwalOptions::default()
-                });
-            } else {
-                Swal::fire(SwalOptions {
-                    title: "This is a title",
-                    text: "This is some text",
-                    icon: SwalIcon::ERROR,
-                    confirm_button_text: "LETS GO",
-                    show_cancel_button: true,
-                    show_deny_button: true,
-                    ..SwalOptions::default()
-                });
+        spawn_local(async move {
+            let login_request = LoginRequest {
+                email: email.clone(),
+                password: password.clone(),
+            };
+
+            let url = format!("{}/auth/login", BACKEND_URL);
+            let res = gloo_net::http::Request::post(&url)
+                .header("Content-Type", "application/json")
+                .credentials(web_sys::RequestCredentials::Include)
+                .body(serde_json::to_string(&login_request).unwrap());
+
+            match res {
+                Ok(res) => {
+                    let response = res.send().await.unwrap();
+                    if response.status() == 200 {
+                        let _success_response: SuccessResponse<String> = response.json().await.unwrap();
+                        navigate("/admin", Default::default());
+                        
+                    } else {
+                        Swal::fire(SwalOptions {
+                            title: "Error",
+                            text: "Login gagal",
+                            icon: SwalIcon::ERROR,
+                            confirm_button_text: "OK",
+                            ..Default::default()
+                        });
+                    }
+                }
+                Err(_) => {
+                    Swal::fire(SwalOptions {
+                        title: "Network Error",
+                        text: "Tidak bisa terhubung ke server",
+                        icon: SwalIcon::ERROR,
+                        confirm_button_text: "OK",
+                        ..Default::default()
+                    });
+                }
             }
-        }
-    });
+        });
+    };
 
 
     view! {
@@ -50,13 +73,10 @@ pub fn Login() -> impl IntoView {
                 </div>
 
                 <div class="card-body">
-                    <form on:submit=move |e| {
-                        e.prevent_default();
-                        on_submit.dispatch(());
-                    }>
+                    <form on:submit=on_submit>
                         <div class="mb-3">
                             <label class="form-label">"Email address"</label>
-                            <input type="text" class="form-control" placeholder="Username" on:input=move |e| email.set(event_target_value(&e))/>
+                            <input type="text" class="form-control" placeholder="Email" on:input=move |e| email.set(event_target_value(&e))/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">"Password"</label>
