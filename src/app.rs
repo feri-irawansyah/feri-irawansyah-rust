@@ -1,15 +1,15 @@
-use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
+use leptos::prelude::*;
 use leptos_sweetalert::*;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
-    components::{ParentRoute, Route, Router, Routes}, hooks::use_navigate, StaticSegment, WildcardSegment
+    components::{ParentRoute, Route, Router, Routes}, StaticSegment, WildcardSegment
 };
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::{
     components:: {
         admin_layout::AdminLayout, catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
-    }, contexts::models::AppState, middleware::session::{check_session, SessionData}, routes::{
+    }, contexts::models::AppState, middleware::session::SessionData, routes::{
         about::About, admin::{dashboard::Dashboard, notes_management::NotesManagement, user_management::UserManagement}, contact::Contact, home::Home, login::Login, notes::{
             category::Category, list_catatan::ListCatatan, slug::Slug
         }, notfound::NotFound, portfolio::Portfolio, services::Services
@@ -31,7 +31,7 @@ pub const BACKEND_URL: &str = "https://snakesystem-api.shuttle.app/api/v1";
             throttleDelay: 99, 
             offset: -9999, 
             delay: 0, 
-            duration: 400, 
+            duration: 600, 
             easing: 'ease',
             once: false, 
             mirror: false, 
@@ -67,26 +67,6 @@ pub fn App() -> impl IntoView {
 
     let state = expect_context::<AppState>();
 
-    Effect::new(move |_| {
-        let navigate = use_navigate();
-        spawn_local(async move { 
-            state.loading.set(true);
-            let response = check_session().await;
-            match response {
-                Ok(session) => {
-                    state.session.set(session);
-                }
-                Err(error) => {
-                    console_log(format!("Error: {:#?}", error).as_str());
-                    navigate("/login", Default::default());
-                }
-            }
-            state.loading.set(false);
-        });
-    });
-
-    let state = expect_context::<AppState>();
-
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
@@ -102,7 +82,7 @@ pub fn App() -> impl IntoView {
         <main data-bs-theme="dark">
             <div class="container-fluid">
                 <LoadingScreen visible=state.loading/>
-                    <div class="row">
+                    <div class="row main-content">
                         <Routes fallback=move || "Not found.">
                             <ParentRoute path=leptos_router::path!("/") view=MenuList>
                                 <Route path=StaticSegment("") view=Home/>

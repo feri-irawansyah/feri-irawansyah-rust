@@ -32,9 +32,11 @@ pub mod components {
     pub mod skill_slider;
     pub mod about_tab;
     pub mod loading;
+    pub mod card_loading;
 }
 pub mod directives {
     pub mod alert_context;
+    pub mod table;
 }
 pub mod middleware {
     pub mod session;

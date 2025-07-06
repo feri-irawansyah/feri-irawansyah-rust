@@ -19,6 +19,8 @@ pub fn About() -> impl IntoView {
 
                 <div class="row justify-content-start">
                     <AboutTab menu_item={menu_item} />
+                </div>
+                <div class="row justify-content-start">
                     <div class="col-12 content">
                         {move || {
                             match menu_item.get() {

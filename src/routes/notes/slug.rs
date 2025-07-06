@@ -3,7 +3,7 @@ use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_params_map;
 use wasm_bindgen::JsCast;
 use leptos::web_sys::HtmlImageElement;
-use crate::{app::BACKEND_URL, components::markdown::MarkdownFromUrl, contexts::{index::format_wib_date, models::{AppState, Note, NoteData}}};
+use crate::{app::BACKEND_URL, components::{card_loading::CardLoading, markdown::MarkdownFromUrl}, contexts::{index::format_wib_date, models::{AppState, Note, NoteData}}};
 
 #[allow(non_snake_case)]
 #[component]
@@ -42,7 +42,7 @@ pub fn Slug() -> impl IntoView {
     view! {
         <Show
             when=move || { !loading.get() }
-            fallback=|| view! { <h1>Loading....</h1> }
+            fallback=|| view! { <CardLoading count=Some(1) delay=Some(0) /> }
         >
             <Show
                 when=move || { notes.get().content.is_empty() }

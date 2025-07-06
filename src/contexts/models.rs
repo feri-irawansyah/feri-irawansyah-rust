@@ -65,7 +65,7 @@ pub struct Notes {
     pub slug: String,
     pub last_update: String,
     pub category: String,
-    pub hash_tags: Option<Vec<HashTag>>
+    pub hashtag: Option<Vec<String>>
 }
 
 #[derive(Clone, Debug, PartialEq, Deserialize)]
@@ -90,7 +90,8 @@ pub struct Note {
     pub category: String,
     pub slug: String,
     pub content: String,
-    pub last_update: String
+    pub last_update: String,
+    pub hashtag: Option<Vec<HashTag>>
 }
 
 impl Note {
@@ -101,7 +102,8 @@ impl Note {
             category: "".to_string(),
             slug: "".to_string(),
             content: "".to_string(),
-            last_update: "".to_string()
+            last_update: "".to_string(),
+            hashtag: None
         }
     }
 }

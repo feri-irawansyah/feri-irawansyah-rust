@@ -1,5 +1,5 @@
 
-use chrono::{DateTime, Datelike, FixedOffset, NaiveDate, Utc, Timelike};
+use chrono::{DateTime, Datelike, FixedOffset, NaiveDate, Utc};
 
 pub fn hitung_usia(tanggal_lahir: &str) -> Option<i32> {
     // Parse tanggal lahir, formatnya "YYYY-MM-DD"

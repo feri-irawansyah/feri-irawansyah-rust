@@ -1,16 +1,54 @@
-use leptos::prelude::*;
-use leptos_router::components::Outlet;
+use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
+use leptos_router::{components::Outlet, hooks::{use_location, use_navigate}};
 
-use crate::{contexts::models::AppState};
+use crate::{contexts::models::AppState, middleware::session::check_session};
 
 #[allow(non_snake_case)]
 #[component]
 pub fn AdminLayout() -> impl IntoView {
-    let state = expect_context::<AppState>();
+    let state = expect_context::<AppState>(); 
     let is_open = RwSignal::new(true);
+    let location = use_location();
+
+    let segment1 = Memo::new(move |_| {
+        location.pathname.get()
+            .split('/')
+            .filter(|s| !s.is_empty())
+            .nth(0)
+            .unwrap_or("")
+            .to_string()
+    });
+
+    let segment2 = Memo::new(move |_| {
+        location.pathname.get()
+            .split('/')
+            .filter(|s| !s.is_empty())
+            .nth(1)
+            .unwrap_or("")
+            .to_string()
+    });
+
+
+    Effect::new(move |_| {
+        let navigate = use_navigate();
+        spawn_local(async move { 
+            state.loading.set(true);
+            let response = check_session().await;
+            match response {
+                Ok(session) => {
+                    state.session.set(session);
+                }
+                Err(error) => {
+                    console_log(format!("Error: {:#?}", error).as_str());
+                    navigate("/login", Default::default());
+                }
+            }
+            state.loading.set(false);
+        });
+    });
 
     view! {
-        <Show when=move || state.session.get().usernid != 0 fallback=|| view! { <span></span>} >
+        <Show when=move || state.session.get().usernid != 0 fallback=move || view! { <span></span>} >
             <div class="container-fluid admin-layout" data-aos="fade-left">
                 <div class="d-flex">
                     <div class=move || {
@@ -29,7 +67,7 @@ pub fn AdminLayout() -> impl IntoView {
                             <li><a href="/admin"><i class="bi bi-grid"></i> <span>Dashboard</span></a></li>
                             <li><a href="/admin/user"><i class="bi bi-person"></i> <span>User Management</span></a></li>
                             <li><a href="/admin/notes-management"><i class="bi bi-journal-code"></i><span>Notes Management</span></a></li>
-                            <li><a href="/admin/settings"><i class="bi bi-gear"></i> <span>Settings</span></a></li>
+                            <li><a href="/"><i class="bi bi-box-arrow-left"></i> <span>Kembali</span></a></li>
                         </ul>
                     </div>
                     <div class=move || {
@@ -42,8 +80,14 @@ pub fn AdminLayout() -> impl IntoView {
                         <nav class="navbar">
                             <div class="container-fluid">
                                 <div class="navbar-brand">
-                                    <button class="menu-toggle" on:click=move |_| is_open.set(!is_open.get())><i class="bi bi-list"></i></button>
-                                    <h5 class="fw-bold mb-0">Snakesystem Admin Area</h5>
+                                    <div class="d-flex align-items-start">
+                                        <button class="menu-toggle" on:click=move |_| is_open.set(!is_open.get())><i class="bi bi-list"></i></button>
+                                        <h5 class="fw-bold mb-0">Snakesystem Admin Area</h5>
+                                    </div>
+                                    <div class="d-flex align-items-start navigation">
+                                        <a href="/">{move || segment1.get()}</a>
+                                        <a href="/">{move || segment2.get()}</a>
+                                    </div>
                                 </div>
                                 <div class="navbar-nav">
                                     <a class="nav-link"><i class="bi bi-bell"></i></a>
