@@ -11,7 +11,7 @@ pub fn NotesManagement() -> impl IntoView {
     let notes_page: RwSignal<i32> = RwSignal::new(1);
     let notes_total: RwSignal<usize> = RwSignal::new(0);
     let notes_loading: RwSignal<bool> = RwSignal::new(false);
-    let notes_limit = 50;
+    let notes_limit = 4;
 
     let fetch_notes = move |page: i32| {
         let offset = (page - 1) * notes_limit;
@@ -27,7 +27,7 @@ pub fn NotesManagement() -> impl IntoView {
             if let Ok(response) = Request::get(&url).send().await {
                 if let Ok(data) = response.json::<serde_json::Value>().await {
                     notes.set(data["rows"].as_array().unwrap_or(&vec![]).to_vec());
-                    notes_total.set(data["total"].as_u64().unwrap_or(0) as usize);
+                    notes_total.set(data["total"].as_u64().unwrap_or(10) as usize);
                 }
             }
             notes_loading.set(false);

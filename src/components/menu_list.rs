@@ -1,5 +1,5 @@
 use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
-use leptos_router::{components::Outlet, hooks::{use_location, use_navigate}, location::Location};
+use leptos_router::{components::Outlet, hooks::use_location, location::Location};
 
 use crate::{contexts::models::AppState, middleware::session::check_session};
 
@@ -11,7 +11,6 @@ pub fn MenuList() -> impl IntoView {
     let state = expect_context::<AppState>();
 
     Effect::new(move |_| {
-        let navigate = use_navigate();
         spawn_local(async move { 
             state.loading.set(true);
             let response = check_session().await;
@@ -21,7 +20,6 @@ pub fn MenuList() -> impl IntoView {
                 }
                 Err(error) => {
                     console_log(format!("Error: {:#?}", error).as_str());
-                    navigate("/login", Default::default());
                 }
             }
             state.loading.set(false);

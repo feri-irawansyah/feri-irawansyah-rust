@@ -8,9 +8,9 @@ pub struct SuccessResponse<T> {
     pub data: Option<T>,
 }
 
-#[derive(Clone, Debug, PartialEq, Deserialize)]
-pub struct ErrorResponse<E> {
-    pub data: Option<E>,
+#[derive(Debug, PartialEq, Deserialize)]
+pub struct ErrorResponse {
+    pub error: Option<serde_json::Value>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize)]

@@ -2,8 +2,8 @@ use leptos::web_sys;
 use leptos::{prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
 use leptos_sweetalert::{Swal, SwalIcon, SwalOptions};
-
-use crate::{app::BACKEND_URL, contexts::models::{LoginRequest, SuccessResponse}};
+use crate::contexts::index::error_message;
+use crate::{app::BACKEND_URL, contexts::models::{LoginRequest, SuccessResponse, ErrorResponse}};
 
 #[allow(non_snake_case)]
 #[component]
@@ -40,9 +40,11 @@ pub fn Login() -> impl IntoView {
                         navigate("/admin", Default::default());
                         
                     } else {
+                        let error: ErrorResponse = response.json::<ErrorResponse>().await.unwrap();
+                        let error_msg: &'static str = Box::leak(error_message(&error.error).into_boxed_str());
                         Swal::fire(SwalOptions {
-                            title: "Error",
-                            text: "Login gagal",
+                            title: "Login failed",
+                            text: error_msg,
                             icon: SwalIcon::ERROR,
                             confirm_button_text: "OK",
                             ..Default::default()

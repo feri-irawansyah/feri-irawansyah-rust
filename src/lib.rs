@@ -37,6 +37,7 @@ pub mod components {
 pub mod directives {
     pub mod alert_context;
     pub mod table;
+    pub mod modal_container;
 }
 pub mod middleware {
     pub mod session;

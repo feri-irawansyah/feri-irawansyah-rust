@@ -1,7 +1,7 @@
 use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_router::{components::Outlet, hooks::{use_location, use_navigate}};
 
-use crate::{contexts::models::AppState, middleware::session::check_session};
+use crate::{contexts::models::AppState, directives::modal_container::ModalContainer, middleware::session::check_session};
 
 #[allow(non_snake_case)]
 #[component]
@@ -102,6 +102,9 @@ pub fn AdminLayout() -> impl IntoView {
                     </div>
                 </div>
             </div>
+            <ModalContainer title="Hello".to_string() size=Some("xl".to_string()) modal_id="hello".to_string()>
+               <h1>Hello</h1>
+            </ModalContainer>
         </Show>
     }
 }
