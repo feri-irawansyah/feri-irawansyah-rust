@@ -1,12 +1,13 @@
 use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_router::{components::Outlet, hooks::{use_location, use_navigate}};
 
-use crate::{contexts::models::AppState, directives::modal_container::ModalContainer, middleware::session::check_session};
+use crate::{contexts::models::{AppState, ModalState}, directives::{markdown::MarkdownFromUrl, modal_container::ModalContainer}, middleware::session::check_session};
 
 #[allow(non_snake_case)]
 #[component]
 pub fn AdminLayout() -> impl IntoView {
     let state = expect_context::<AppState>(); 
+    let modal_state = expect_context::<ModalState>(); 
     let is_open = RwSignal::new(true);
     let location = use_location();
 
@@ -102,8 +103,10 @@ pub fn AdminLayout() -> impl IntoView {
                     </div>
                 </div>
             </div>
-            <ModalContainer title="Hello".to_string() size=Some("xl".to_string()) modal_id="hello".to_string()>
-               <h1>Hello</h1>
+        </Show>
+        <Show when=move || modal_state.note_url.get().is_empty() fallback=move || view! { <span></span>} >
+            <ModalContainer title=modal_state.title.get() size=Some("xl".to_string()) modal_id="note-content".to_string()>
+                <MarkdownFromUrl url={modal_state.note_url}/>
             </ModalContainer>
         </Show>
     }

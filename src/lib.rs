@@ -27,7 +27,6 @@ pub mod components {
     pub mod menu_list;
     pub mod admin_layout;
     pub mod sweet_alert;
-    pub mod markdown;
     pub mod clock;
     pub mod skill_slider;
     pub mod about_tab;
@@ -35,6 +34,7 @@ pub mod components {
     pub mod card_loading;
 }
 pub mod directives {
+    pub mod markdown;
     pub mod alert_context;
     pub mod table;
     pub mod modal_container;

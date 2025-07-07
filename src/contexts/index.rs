@@ -1,8 +1,8 @@
-use leptos::prelude::*;
+use leptos::{leptos_dom::logging::console_log, prelude::*};
 use chrono::{DateTime, Datelike, FixedOffset, NaiveDate, Timelike, Utc};
 use serde_json::Value;
 
-use crate::directives::table::Columns;
+use crate::{contexts::models::{AppState, ModalState}, directives::table::Columns};
 
 pub fn hitung_usia(tanggal_lahir: &str) -> Option<i32> {
     // Parse tanggal lahir, formatnya "YYYY-MM-DD"
@@ -97,15 +97,16 @@ pub fn error_message(err: &Option<Value>) -> String {
     }
 }
 
-pub fn format_cell_value(
-    item: &serde_json::Value,
-    col: &Columns,
+pub fn format_cell_value(item: &serde_json::Value, col: &Columns,
 // ) -> Option<leptos::prelude::View<leptos::html::HtmlElement<Td, Vec<AnyAttribute>, (leptos::html::HtmlElement<leptos::html::Span, Vec<AnyAttribute>, (String,)>,)>>> {
 ) -> Option<impl IntoView> {
+
+    let state: ModalState = expect_context::<ModalState>();
 
     match col.field.as_str() {
         "notes_id" | "tsv" => {
             let string = "hidden";
+
             Some(view! {
                 <td class="d-none".to_string()>
                     <a href="#".to_string() class="invisible".to_string() data-bs-toggle="".to_string() data-bs-target="".to_string()>{string.to_string()}</a>
@@ -114,10 +115,17 @@ pub fn format_cell_value(
         }
 
         "content" => {
-            let value = item.get(&col.field)?.as_str().unwrap_or("");
+            let value = item.get(&col.field)?.as_str().unwrap_or("").to_string();
+            
+            let get_url = move |value: &str| {
+                state.note_url.set(value.to_string());
+                state.title.set("Masa ngga masuk".to_string());
+                console_log(&value);
+            };
+            
             Some(view! {
                 <td class="".to_string()>
-                    <a href="#".to_string() class="".to_string() data-bs-toggle="modal".to_string() data-bs-target="#hello".to_string()>{value.to_string()}</a>
+                    <a href="#".to_string() on:click=move |_| { get_url(&value); } class="".to_string() data-bs-toggle="modal".to_string() data-bs-target="#note-content".to_string()>{value.clone()}</a>
                 </td>
             })
         }

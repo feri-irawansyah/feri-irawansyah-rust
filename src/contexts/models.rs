@@ -135,5 +135,13 @@ pub struct AppState {
     pub name: RwSignal<String>,
     pub title: RwSignal<String>,
     pub loading: RwSignal<bool>,
-    pub session: RwSignal<SessionData>
+    pub session: RwSignal<SessionData>,
+    pub note_url: RwSignal<String>,
 }
+
+#[derive(Clone, Debug, Default)]
+pub struct ModalState {
+    pub note_url: RwSignal<String>,
+    pub title: RwSignal<String>,
+}
+

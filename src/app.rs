@@ -9,7 +9,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use crate::{
     components:: {
         admin_layout::AdminLayout, catatan_layout::CatatanLayout, loading::LoadingScreen, menu_list::MenuList
-    }, contexts::models::AppState, middleware::session::SessionData, routes::{
+    }, contexts::models::{AppState, ModalState}, middleware::session::SessionData, routes::{
         about::About, admin::{dashboard::Dashboard, notes_management::NotesManagement, user_management::UserManagement}, contact::Contact, home::Home, login::Login, notes::{
             category::Category, list_catatan::ListCatatan, slug::Slug
         }, notfound::NotFound, portfolio::Portfolio, services::Services
@@ -55,11 +55,18 @@ pub fn App() -> impl IntoView {
         name: RwSignal::new("Feri Irawansyah".to_string()),
         title: RwSignal::new("".to_string()),
         loading: RwSignal::new(false),
-        session: RwSignal::new(SessionData::new())
+        session: RwSignal::new(SessionData::new()),
+        note_url: RwSignal::new("".to_string()),
+    };
+
+    let modal_state = ModalState {
+        title: RwSignal::new("".to_string()),
+        note_url: RwSignal::new("".to_string()),
     };
 
     // Register biar bisa dipakai semua komponen
     provide_context(global_state);
+    provide_context(modal_state);
 
     Effect::new(move |_| {
         initAOS(); // ini panggil JS function

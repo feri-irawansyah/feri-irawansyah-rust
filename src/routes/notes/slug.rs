@@ -3,14 +3,14 @@ use leptos::{leptos_dom::logging::console_log, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_params_map;
 use wasm_bindgen::JsCast;
 use leptos::web_sys::HtmlImageElement;
-use crate::{app::BACKEND_URL, components::{card_loading::CardLoading, markdown::MarkdownFromUrl}, contexts::{index::format_wib_date, models::{AppState, Note, NoteData}}};
+use crate::{app::BACKEND_URL, components::card_loading::CardLoading, contexts::{index::format_wib_date, models::{AppState, Note, NoteData}}, directives::markdown::MarkdownFromUrl};
 
 #[allow(non_snake_case)]
 #[component]
 pub fn Slug() -> impl IntoView {
     let params = use_params_map();
     let slug = params.with(|p| p.get("slug"));
-
+    let content = RwSignal::new("".to_string());
     let note: RwSignal<Note> = RwSignal::new(Note::new());
     let state = expect_context::<AppState>();
     let (loading, set_loading) = signal(false);
@@ -31,6 +31,7 @@ pub fn Slug() -> impl IntoView {
                 if let Ok(data) = response.json::<NoteData>().await {
                     note.set(data.data);
                     state.title.set(note.get().title.clone());
+                    content.set(note.get().content.clone());
                 } else {
                     console_log(format!("Error parsing JSON: {:?}", response.status()).as_str());
                 }
@@ -68,7 +69,7 @@ pub fn Slug() -> impl IntoView {
                                     }/>
                             </div>
                             <div class="markdown-body">
-                                <MarkdownFromUrl url={note.get().content}/>
+                                <MarkdownFromUrl url={content}/>
                             </div>
                         </div>
                     }
