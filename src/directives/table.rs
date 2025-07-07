@@ -22,7 +22,7 @@ pub struct Columns {
 
 #[allow(non_snake_case)]
 #[component]
-pub fn Table(table: String, data: RwSignal<Vec<serde_json::Value>>, loading_data: RwSignal<bool>, page: RwSignal<i32>, limit: i32, total: RwSignal<i32>, refresh: impl Fn(i32) + 'static) -> impl IntoView {
+pub fn Table(table: String, data: RwSignal<Vec<serde_json::Value>>, loading_data: RwSignal<bool>, page: RwSignal<i32>, limit: i32, total: RwSignal<usize>, refresh: impl Fn(i32) + 'static) -> impl IntoView {
     let columns = RwSignal::new(vec![]);
     let (loading, set_loading) = signal(false);
 
@@ -45,36 +45,42 @@ pub fn Table(table: String, data: RwSignal<Vec<serde_json::Value>>, loading_data
     });
 
     view! {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    {move || columns.get().iter().map(|column| view! {
-                        <th>{column.title.clone()}</th>
-                    }).collect_view()}
-                </tr>
-            </thead>
-            <tbody>
-                <Show when=move || !loading_data.get() fallback=|| view! { <span>loading...</span> }>
-                    {move || {
-                        data.get().iter().map(|item| {
-                            view! {
-                                <tr>
-                                    {
-                                        columns.get().iter().map(|col| {
-                                            let value = item.get(&col.field).unwrap_or(&serde_json::Value::Null);
-                                            view! {
-                                                <td>{value.to_string()}</td>
-                                            }
-                                        }).collect_view()
-                                    }
-                                </tr>
-                            }
-                        }).collect_view()
-                    }}
-                </Show>
-            </tbody>
-        </table>
-        <nav class=move || if total.get() == limit { "" } else { "d-none" }>
+        
+
+        <div class="table-responsive">
+            <table class="table table-striped responsive-table">
+                <thead>
+                    <tr>
+                        {move || columns.get().iter().map(|column| view! {
+                            <th>{column.title.clone()}</th>
+                        }).collect_view()}
+                    </tr>
+                </thead>
+                <tbody>
+                    <Show when=move || !loading_data.get() fallback=|| view! { <span>loading...</span> }>
+                        {move || {
+                            data.get().iter().map(|item| {
+                                view! {
+                                    <tr>
+                                        {
+                                            columns.get().iter().map(|col| {
+                                                let value = item.get(&col.field).unwrap_or(&serde_json::Value::Null);
+                                                view! {
+                                                    <td>{value.to_string()}</td>
+                                                }
+                                            }).collect_view()
+                                        }
+                                    </tr>
+                                }
+                            }).collect_view()
+                        }}
+                    </Show>
+                </tbody>
+            </table>
+        </div>
+
+
+        <nav class=move || if total.get() as i32 <= limit { "d-none" } else { "pagination-container" }>
             <ul class="pagination justify-content-end pagination-sm">
                 <li class=format!("page-item {}", if page.get() == 1 { "disabled" } else { "" })>
                     <button class="page-link" on:click=move |_| page.set(page.get() - 1)>
@@ -83,6 +89,7 @@ pub fn Table(table: String, data: RwSignal<Vec<serde_json::Value>>, loading_data
                 </li>
                 {
                     let total_pages = (total.get() as f64 / limit as f64).ceil() as i32;
+                    console_log(format!("total pages: {}, total: {}, limit: {}", total_pages, total.get(), limit).as_str());
                     (1..=total_pages).map(|i| {
                         view! {
                             <li class=format!("page-item {}", if page.get() == i { "active" } else { "" })>

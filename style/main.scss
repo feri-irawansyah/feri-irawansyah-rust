@@ -1913,6 +1913,7 @@ section,
 }
 
 .admin-layout {
+
   height: 100vh;
   .row {
     height: 100%;
@@ -2002,9 +2003,10 @@ section,
   .main-area {
     transition: margin-left 0.3s ease;
     margin-left: 220px;
-    width: 100%;
+    width: calc(100% - 220px);
     // max-height: 100vh;
     padding-left: 20px;
+    transition: all 0.3s ease;
 
     .navbar {
       // background: #f8f9fa;
@@ -2012,9 +2014,28 @@ section,
       padding: 10px 0px;
 
       .navbar-brand {
+        padding: 0 !important;
         display: flex;
-        align-items: center;
+        align-items: start;
         flex-direction: column;
+
+        .d-flex {
+          align-items: center !important;
+        }
+
+        .navigation {
+          line-height: 1rem;
+          margin: 0;
+
+          a {
+            color: #fff;
+
+            &:hover {
+              text-decoration: underline;
+              color: $primary;
+            }
+          }
+        }
 
         .menu-toggle {
           border: none;
@@ -2050,6 +2071,8 @@ section,
 
     &.expanded {
       margin-left: 80px;
+      width: 100%;
+      transition: all 0.3s ease;
     }
   }
 
@@ -2081,8 +2104,37 @@ section,
             max-height: 35vh !important; 
             height: 35vh !important;
             position: relative !important;
-            overflow-y: auto !important;
           }
+        }
+      }
+    }
+  }
+  .notes-management {
+    padding: 0;
+    width: 100%;
+    overflow-y: auto;
+    height: 100%;
+    max-height: 85vh;
+
+    .row {
+      margin: 0 !important;
+      padding: 0 !important;
+      // background-color: salmon;
+      width: 100% !important;
+
+      .card {
+        margin: 0 !important;
+        position: relative !important;
+        height: 100% !important;
+
+        .card-header {
+          width: 100% !important;
+        }
+
+        .card-body {
+          position: relative !important;
+          overflow-y: auto !important;
+          max-height: 80vh;
         }
       }
     }

@@ -49,7 +49,7 @@ pub fn AdminLayout() -> impl IntoView {
 
     view! {
         <Show when=move || state.session.get().usernid != 0 fallback=move || view! { <span></span>} >
-            <div class="container-fluid admin-layout" data-aos="fade-left">
+            <div class="container-fluid admin-layout scroll-custom" data-aos="fade-left">
                 <div class="d-flex">
                     <div class=move || {
                             if is_open.get() {
@@ -85,8 +85,8 @@ pub fn AdminLayout() -> impl IntoView {
                                         <h5 class="fw-bold mb-0">Snakesystem Admin Area</h5>
                                     </div>
                                     <div class="d-flex align-items-start navigation">
-                                        <a href="/">{move || segment1.get()}</a>
-                                        <a href="/">{move || segment2.get()}</a>
+                                        <a href=move || format!("/{}", segment1.get())>{move || format!("/{}", segment1.get())}</a>
+                                        <a href=move || format!("/{}/{}", segment1.get(), segment2.get())>{move || format!("/{}", segment2.get())}</a>
                                     </div>
                                 </div>
                                 <div class="navbar-nav">

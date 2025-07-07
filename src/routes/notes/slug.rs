@@ -11,7 +11,7 @@ pub fn Slug() -> impl IntoView {
     let params = use_params_map();
     let slug = params.with(|p| p.get("slug"));
 
-    let notes: RwSignal<Note> = RwSignal::new(Note::new());
+    let note: RwSignal<Note> = RwSignal::new(Note::new());
     let state = expect_context::<AppState>();
     let (loading, set_loading) = signal(false);
 
@@ -29,8 +29,8 @@ pub fn Slug() -> impl IntoView {
             set_loading(true);
             if let Ok(response) = Request::get(&url).send().await {
                 if let Ok(data) = response.json::<NoteData>().await {
-                    notes.set(data.data);
-                    state.title.set(notes.get().title.clone());
+                    note.set(data.data);
+                    state.title.set(note.get().title.clone());
                 } else {
                     console_log(format!("Error parsing JSON: {:?}", response.status()).as_str());
                 }
@@ -45,7 +45,7 @@ pub fn Slug() -> impl IntoView {
             fallback=|| view! { <CardLoading count=Some(1) delay=Some(0) /> }
         >
             <Show
-                when=move || { notes.get().content.is_empty() }
+                when=move || { note.get().content.is_empty() }
                 fallback=move || {
                     view! { 
                         <div class="author d-flex flex-row align-items-start justify-content-start w-100">
@@ -53,12 +53,12 @@ pub fn Slug() -> impl IntoView {
                             <div class="flex-column">
                                 <a class="text-decoration-none text-muted" href="https://github.com/feri-irawansyah" target="_blank">
                                 {move || state.name.get().to_string()} <img src="/assets/img/real.png" width="20px" alt=""/></a>
-                                <p class="text-muted">{format_wib_date(&notes.get().last_update)}</p>
+                                <p class="text-muted">{format_wib_date(&note.get().last_update)}</p>
                             </div>
                         </div>
                         <div class="w-100"  data-aos="fade-up" data-aos-duration="1000">
                             <div class="image-content d-flex justify-content-center" >
-                                <img class="img-fluid rounded" src={format!("/assets/img/notes/{}.png", notes.get().slug)} alt={notes.get().title} 
+                                <img class="img-fluid rounded" src={format!("/assets/img/notes/{}.png", note.get().slug)} alt={note.get().title} 
                                     on:error=move |e: leptos::ev::ErrorEvent| {
                                         if let Some(target) = e.target() {
                                             if let Ok(img) = target.dyn_into::<HtmlImageElement>() {
@@ -68,7 +68,7 @@ pub fn Slug() -> impl IntoView {
                                     }/>
                             </div>
                             <div class="markdown-body">
-                                <MarkdownFromUrl url={notes.get().content}/>
+                                <MarkdownFromUrl url={note.get().content}/>
                             </div>
                         </div>
                     }

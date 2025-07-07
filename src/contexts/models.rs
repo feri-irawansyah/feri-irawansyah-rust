@@ -91,7 +91,7 @@ pub struct Note {
     pub slug: String,
     pub content: String,
     pub last_update: String,
-    pub hashtag: Option<Vec<HashTag>>
+    pub hashtag: Option<Vec<String>>
 }
 
 impl Note {

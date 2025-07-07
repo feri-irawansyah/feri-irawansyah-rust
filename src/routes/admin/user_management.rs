@@ -10,7 +10,7 @@ pub fn UserManagement() -> impl IntoView {
     // portfolio state
     let portfolio: RwSignal<Vec<serde_json::Value>> = RwSignal::new(vec![serde_json::Value::Array(vec![])]);
     let portfolio_page: RwSignal<i32> = RwSignal::new(1);
-    let portfolio_total: RwSignal<i32> = RwSignal::new(0);
+    let portfolio_total: RwSignal<usize> = RwSignal::new(0);
     let portfolio_loading: RwSignal<bool> = RwSignal::new(false);
     let portfolio_limit = 3;
 
@@ -34,6 +34,7 @@ pub fn UserManagement() -> impl IntoView {
             if let Ok(response) = Request::get(&url).send().await {
                 if let Ok(data) = response.json::<serde_json::Value>().await {
                     portfolio.set(data["rows"].as_array().unwrap_or(&vec![]).to_vec());
+                    portfolio_total.set(data["total"].as_i64().unwrap_or(0) as usize);
                 }
             }
             portfolio_loading.set(false);
