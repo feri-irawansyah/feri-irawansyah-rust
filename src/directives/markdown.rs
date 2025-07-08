@@ -68,7 +68,7 @@ pub async fn markdown_to_html(md: String) -> Result<String, ServerFnError> {
 
 #[allow(non_snake_case)]
 #[component]
-pub fn MarkdownFromUrl(url: RwSignal<String>) -> impl IntoView {
+pub fn MarkdownFromUrl(url: RwSignal<Option<String>>) -> impl IntoView {
     let (content, set_content) = signal::<Option<String>>(None);
     let (html, set_html) = signal::<Option<String>>(None);
     let (error, set_error) = signal::<Option<String>>(None);
@@ -77,10 +77,10 @@ pub fn MarkdownFromUrl(url: RwSignal<String>) -> impl IntoView {
         let set_content = set_content.clone();
         let set_error = set_error.clone();
         async move {
-            if url.get().is_empty() {
+            if url.get().is_none() {
                 set_error.set(Some("URL is empty".to_string()));
             } else {
-                match Request::get(&url.get()).send().await {
+                match Request::get(url.get().unwrap().as_str()).send().await {
                     Ok(res) => match res.text().await {
                         Ok(text) => set_content.set(Some(text)),
                         Err(e) => set_error.set(Some(format!("Error reading text: {e}"))),

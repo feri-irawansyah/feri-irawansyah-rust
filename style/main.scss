@@ -690,7 +690,7 @@ section,
 
 .hero:before {
   content: "";
-  background: color-mix(in srgb, var(--background-color), transparent 40%);
+  background: color-mix(in srgb, var(--background-color), transparent 30%);
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -740,7 +740,7 @@ section,
               flex-wrap: wrap !important;
 
               span {
-                background-color: #212529;
+                background-color: #2f3438;
                 border-radius: 5px;
                 padding: 0 5px;
                 padding-bottom: 4px;
@@ -1811,7 +1811,7 @@ section,
           flex-wrap: wrap !important;
 
           span {
-            background-color: #212529;
+            background-color: #2f3438;
             border-radius: 5px;
             padding: 0 5px;
             padding-bottom: 4px;

@@ -61,7 +61,7 @@ pub fn App() -> impl IntoView {
 
     let modal_state = ModalState {
         title: RwSignal::new("".to_string()),
-        note_url: RwSignal::new("".to_string()),
+        note_url: RwSignal::new(None),
     };
 
     // Register biar bisa dipakai semua komponen

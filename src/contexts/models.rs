@@ -141,7 +141,7 @@ pub struct AppState {
 
 #[derive(Clone, Debug, Default)]
 pub struct ModalState {
-    pub note_url: RwSignal<String>,
+    pub note_url: RwSignal<Option<String>>,
     pub title: RwSignal<String>,
 }
 

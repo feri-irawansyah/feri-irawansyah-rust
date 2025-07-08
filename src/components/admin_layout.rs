@@ -104,10 +104,13 @@ pub fn AdminLayout() -> impl IntoView {
                 </div>
             </div>
         </Show>
-        <Show when=move || modal_state.note_url.get().is_empty() fallback=move || view! { <span></span>} >
-            <ModalContainer title=modal_state.title.get() size=Some("xl".to_string()) modal_id="note-content".to_string()>
-                <MarkdownFromUrl url={modal_state.note_url}/>
-            </ModalContainer>
-        </Show>
+        {move || match modal_state.note_url.get() {
+            None => view! { <p>"Loading..."</p> }.into_any(),
+            Some(_) => view! {
+                <ModalContainer title=modal_state.title.get() size=Some("xl".to_string()) modal_id="note-content".to_string()>
+                    <MarkdownFromUrl url={modal_state.note_url}/>
+                </ModalContainer>
+             }.into_any()
+        }}
     }
 }

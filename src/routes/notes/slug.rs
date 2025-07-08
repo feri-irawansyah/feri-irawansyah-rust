@@ -10,7 +10,7 @@ use crate::{app::BACKEND_URL, components::card_loading::CardLoading, contexts::{
 pub fn Slug() -> impl IntoView {
     let params = use_params_map();
     let slug = params.with(|p| p.get("slug"));
-    let content = RwSignal::new("".to_string());
+    let content: RwSignal<Option<String>> = RwSignal::new(None);
     let note: RwSignal<Note> = RwSignal::new(Note::new());
     let state = expect_context::<AppState>();
     let (loading, set_loading) = signal(false);
@@ -31,7 +31,7 @@ pub fn Slug() -> impl IntoView {
                 if let Ok(data) = response.json::<NoteData>().await {
                     note.set(data.data);
                     state.title.set(note.get().title.clone());
-                    content.set(note.get().content.clone());
+                    content.set(Some(note.get().content.clone()));
                 } else {
                     console_log(format!("Error parsing JSON: {:?}", response.status()).as_str());
                 }
